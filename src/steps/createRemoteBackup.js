@@ -1,6 +1,6 @@
 async function createRemoteBackup(backup, connection) {
   return backup.server.actions.reduce((previousStep, step) => {
-    return previousStep.then(() => step(backup, connection));
+    return previousStep.then(updatedBackup => step(updatedBackup, connection));
   }, Promise.resolve(backup));
 }
 

@@ -39,6 +39,23 @@ describe('createRemoteBackup', () => {
     server.actions.forEach(action => expect(action).toBeCalledWith(backup, connection));
   });
 
+  it('should pass updated backup objects to all actions', async () => {
+    const server = Object.assign({}, serverPrototype, {
+      actions: [
+        backup => Object.assign({}, backup, { action1: true }),
+        backup => Object.assign({}, backup, { action2: true }),
+      ]
+    });
+    const backup = createBackup(server);
+
+    const returnedBackup = await createRemoteBackup(backup, connection);
+
+    expect(returnedBackup).toEqual(expect.objectContaining({
+      action1: true,
+      action2: true
+    }));
+  });
+
   it('should set backup path', async () => {
     const server = Object.assign({}, serverPrototype, {
       actions: [
