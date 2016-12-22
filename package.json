@@ -1,0 +1,25 @@
+{
+  "name": "hqbk-backupper",
+  "version": "0.1.0",
+  "local": true,
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "author": "Roald Hacquebord <roald@hacquebordbuckles.nl>",
+  "license": "ISC",
+  "dependencies": {
+    "babel-plugin-transform-async-to-generator": "^6.16.0",
+    "babel-register": "^6.18.0",
+    "dotenv": "^2.0.0",
+    "node-ssh": "^3.1.0"
+  },
+  "devDependencies": {
+    "jest": "^18.0.0"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "verbose": true
+  }
+}
