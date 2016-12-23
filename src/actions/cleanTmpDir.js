@@ -10,7 +10,7 @@ async function cleanTmpDir(backup, connection) {
   const command = await connection.execCommand(`rm -rf ${tmpDir}`);
 
   if (command.code !== 0) {
-    throw new CommandFailedError(cleanTmpDir.name, command.code, command.stdout, command.stderr);
+    throw new CommandFailedError(cleanTmpDir.name, command);
   }
 
   return backup;

@@ -41,9 +41,11 @@ describe('cleanTmpDir', () => {
     } catch (error) {
       expect(error).toBeInstanceOf(CommandFailedError);
       expect(error).toEqual(expect.stringMatching('cleanTmpDir'));
-      expect(error.exitCode).toEqual(1);
-      expect(error.stdout).toEqual('stdout');
-      expect(error.stderr).toEqual('stderr');
+      expect(error.command).toEqual(expect.objectContaining({
+        code: 1,
+        stdout: 'stdout',
+        stderr: 'stderr'
+      }));
     }
   });
 

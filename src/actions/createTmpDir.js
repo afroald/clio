@@ -6,7 +6,7 @@ async function createTmpDir(backup, connection) {
   const command = await connection.execCommand(`mkdir -p "${tmpDir}"`);
 
   if (command.code !== 0) {
-    throw new CommandFailedError(createTmpDir.name, command.code, command.stdout, command.stderr);
+    throw new CommandFailedError(createTmpDir.name, command);
   }
 
   return u({

@@ -1,10 +1,8 @@
 class CommandFailedError extends Error {
-  constructor(commandName, exitCode, stdout, stderr) {
-    super(`Command ${commandName} failed with code: ${exitCode}`);
+  constructor(commandName = 'unknown', command = { code: 'unknown' }) {
+    super(`Command ${commandName} failed with code: ${command.code}`);
 
-    this.exitCode = exitCode;
-    this.stdout = stdout;
-    this.stderr = stderr;
+    this.command = command;
   }
 }
 

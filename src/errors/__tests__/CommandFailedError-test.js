@@ -15,11 +15,9 @@ describe('CommandFailedError', () => {
     }));
   });
 
-  it('should have `exitCode`, `stdout` and `stderr`', () => {
-    const error = new CommandFailedError('commandName', 'exitCode', 'stdout', 'stderr');
+  it('should include the command', () => {
+    const error = new CommandFailedError('commandName', 'command');
 
-    expect(error.exitCode).toBe('exitCode');
-    expect(error.stdout).toBe('stdout');
-    expect(error.stderr).toBe('stderr');
+    expect(error.command).toBe('command');
   });
 });
