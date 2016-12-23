@@ -1,5 +1,4 @@
 const server = {
-  host: '',
   hostname: '',
   config: {
     tmpDir: '/tmp/running-backup'

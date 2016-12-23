@@ -10,12 +10,16 @@ class Backupper {
   async backup(server) {
     const backup = createBackup(server);
     const connection = await this.getConnectionForServer(server);
-    const remoteBackup = await createRemoteBackup(backup, connection);
-    console.log(remoteBackup);
+    try {
+      const remoteBackup = await createRemoteBackup(backup, connection);
+      console.log(remoteBackup);
+    } catch (error) {
+      console.log('Failed to create remote Backup');
+      throw error;
+    }
     connection.dispose();
     // const localBackup = await downloadBackup(remoteBackup, dest);
     // const encryptedBackup = await encryptBackup(localBackup);
-
   }
 
   async getConnectionForServer({ hostname, ssh }) {
