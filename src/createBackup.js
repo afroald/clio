@@ -1,11 +1,13 @@
-const backup = {
+const u = require('updeep');
+
+const backup = u.freeze({
   server: null,
   remote: {},
   local: {}
-};
+});
 
 function createBackup(server, options = {}) {
-  return Object.assign({}, backup, { server }, options);
+  return u(Object.assign({ server }, options), backup);
 }
 
 module.exports = createBackup;

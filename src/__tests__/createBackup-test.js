@@ -1,5 +1,5 @@
 /* eslint-env node, jest */
-
+const u = require('updeep');
 const createBackup = require('./../createBackup');
 const server = require('./../servers/server');
 
@@ -18,5 +18,10 @@ describe('createBackup', () => {
     expect(backup).toEqual(expect.objectContaining({
       foo: 'bar'
     }));
+  });
+
+  it('should return a frozen object', () => {
+    const backup = createBackup(server);
+    expect(Object.isFrozen(backup)).toBe(true);
   });
 });

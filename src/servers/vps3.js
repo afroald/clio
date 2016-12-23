@@ -1,5 +1,7 @@
-const server = require('./server');
+const CommandFailedError = require('../errors/CommandFailedError');
 const createTmpDir = require('../actions/createTmpDir');
+const cleanTmpDir = require('../actions/cleanTmpDir');
+const server = require('./server');
 
 const vps3 = Object.assign(server, {
   hostname: 'vps3',
@@ -11,7 +13,22 @@ const vps3 = Object.assign(server, {
   },
   actions: [
     createTmpDir,
-    
+    // async (backup, connection) => {
+    //   const result = await connection.execCommand('sudo gitlab-rake gitlab:backup:create');
+
+    //   if (result.code !== 0) {
+    //     throw new CommandFailedError('backup gitlab');
+    //   }
+
+    //   const newBackup = Object.assign({}, backup);
+
+    //   if (!newBackup.remote.log) {
+    //     newBackup.remote.log = {};
+    //   }
+
+
+    // }
+    cleanTmpDir
   ]
 });
 

@@ -13,9 +13,11 @@
     "babel-plugin-transform-async-to-generator": "^6.16.0",
     "babel-register": "^6.18.0",
     "dotenv": "^2.0.0",
-    "node-ssh": "^3.1.0"
+    "node-ssh": "^3.1.0",
+    "updeep": "^1.0.0"
   },
   "devDependencies": {
+    "babel-jest": "^18.0.0",
     "jest": "^18.0.0"
   },
   "jest": {

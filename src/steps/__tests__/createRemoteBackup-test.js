@@ -43,7 +43,7 @@ describe('createRemoteBackup', () => {
     const server = Object.assign({}, serverPrototype, {
       actions: [
         backup => Object.assign({}, backup, { action1: true }),
-        backup => Object.assign({}, backup, { action2: true }),
+        backup => Object.assign({}, backup, { action2: true })
       ]
     });
     const backup = createBackup(server);
