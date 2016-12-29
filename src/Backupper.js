@@ -28,7 +28,7 @@ class Backupper {
     }
 
     console.log('Connecting to %s', hostname);
-    const client = new SSH;
+    const client = new SSH();
     const connection = client.connect(ssh);
 
     this.connections[hostname] = connection;
