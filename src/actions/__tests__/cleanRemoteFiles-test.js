@@ -28,11 +28,6 @@ describe('cleanRemoteFiles', () => {
     expect(promise).toBeInstanceOf(Promise);
   });
 
-  it('should not modify the original backup', async () => {
-    const newBackup = await cleanRemoteFiles(backup, connection);
-    expect(newBackup).not.toBe(backup);
-  });
-
   it('should execute command for each file', async () => {
     await cleanRemoteFiles(backup, connection);
     expect(connection.execCommand).toHaveBeenCalledTimes(2);
@@ -52,9 +47,14 @@ describe('cleanRemoteFiles', () => {
     }));
   });
 
-  it('should reject when a delete command fails', async () => {
+  it('should not modify the original backup', async () => {
+    const newBackup = await cleanRemoteFiles(backup, connection);
+    expect(newBackup).not.toBe(backup);
+  });
+
+  it('should reject when ssh connection fails', async () => {
     connection = {
-      execCommand: jest.fn(() => Promise.resolve({ code: 1 }))
+      execCommand: jest.fn(() => Promise.reject(new Error()))
     };
 
     let thrownError = null;
@@ -69,9 +69,9 @@ describe('cleanRemoteFiles', () => {
     expect(thrownError).toBeInstanceOf(Error);
   });
 
-  it('should reject when ssh connection fails', async () => {
+  it('should reject when command fails', async () => {
     connection = {
-      execCommand: jest.fn(() => Promise.reject(new Error()))
+      execCommand: jest.fn(() => Promise.resolve({ code: 1 }))
     };
 
     let thrownError = null;

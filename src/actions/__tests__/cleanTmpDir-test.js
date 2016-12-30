@@ -27,7 +27,24 @@ describe('cleanTmpDir', () => {
     expect(promise).toBeInstanceOf(Promise);
   });
 
-  it('should throw CommandFailedError when command fails', async () => {
+  it('should reject when ssh connection fails', async () => {
+    connection = {
+      execCommand: jest.fn(() => Promise.reject(new Error()))
+    };
+
+    let thrownError = null;
+
+    try {
+      await cleanTmpDir(backup, connection);
+    } catch (error) {
+      thrownError = error;
+    }
+
+    expect(thrownError).not.toBe(null);
+    expect(thrownError).toBeInstanceOf(Error);
+  });
+
+  it('should reject when command fails', async () => {
     connection = {
       execCommand: jest.fn(() => Promise.resolve({
         code: 1,
@@ -36,22 +53,16 @@ describe('cleanTmpDir', () => {
       }))
     };
 
-    let errorThrown = false;
+    let thrownError = null;
 
     try {
       await cleanTmpDir(backup, connection);
     } catch (error) {
-      errorThrown = true;
-      expect(error).toBeInstanceOf(CommandFailedError);
-      expect(error).toEqual(expect.stringMatching('cleanTmpDir'));
-      expect(error.command).toEqual(expect.objectContaining({
-        code: 1,
-        stdout: 'stdout',
-        stderr: 'stderr'
-      }));
+      thrownError = error;
     }
 
-    expect(errorThrown).toBe(true);
+    expect(thrownError).not.toBe(null);
+    expect(thrownError).toBeInstanceOf(CommandFailedError);
   });
 
   it('should do nothing if no tmpDir is known', async () => {
