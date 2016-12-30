@@ -1,4 +1,5 @@
 /* eslint-env node, jest */
+
 const u = require('updeep');
 const createBackup = require('./../createBackup');
 const server = require('./../servers/server');
