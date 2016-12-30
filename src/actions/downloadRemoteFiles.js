@@ -11,6 +11,7 @@ async function downloadRemoteFiles(backup, connection) {
       const fileName = path.basename(remoteFile);
       const localPath = path.join(backup.local.tmpDir, fileName);
 
+      console.log('Downloading %s', fileName);
       await connection.getFile(remoteFile, localPath);
 
       downloadedFiles.push(localPath);

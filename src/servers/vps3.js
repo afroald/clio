@@ -1,5 +1,4 @@
-const createTmpDir = require('../actions/createTmpDir');
-const cleanTmpDir = require('../actions/cleanTmpDir');
+const downloadRemoteFiles = require('../actions/downloadRemoteFiles');
 const runGitlabBackup = require('../actions/runGitlabBackup');
 const server = require('./server');
 
@@ -11,9 +10,8 @@ const vps3 = Object.assign(server, {
     privateKey: process.env.VPS3_PRIVATE_KEY
   },
   actions: [
-    createTmpDir,
     runGitlabBackup,
-    cleanTmpDir
+    downloadRemoteFiles
   ]
 });
 
