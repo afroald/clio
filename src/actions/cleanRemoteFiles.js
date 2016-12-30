@@ -21,6 +21,7 @@ async function cleanRemoteFiles(backup, connection) {
 
   return u({
     remote: {
+      cleanedFiles,
       files: (files) => {
         return files.filter((file) => {
           return cleanedFiles.indexOf(file) === -1;

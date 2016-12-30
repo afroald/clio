@@ -13,7 +13,7 @@ describe('cleanRemoteFiles', () => {
       remote: {
         files: [
           'file1',
-          'file 2'
+          'file2'
         ]
       }
     });
@@ -42,17 +42,17 @@ describe('cleanRemoteFiles', () => {
     });
   });
 
-  it('should remove files from backup', async () => {
+  it('should update files on backup', async () => {
     const newBackup = await cleanRemoteFiles(backup, connection);
     expect(newBackup).toEqual(expect.objectContaining({
       remote: expect.objectContaining({
+        cleanedFiles: ['file1', 'file2'],
         files: []
       })
     }));
   });
 
   it('should reject when a delete command fails', async () => {
-    // Test command failure
     connection = {
       execCommand: jest.fn(() => Promise.resolve({ code: 1 }))
     };
@@ -67,13 +67,14 @@ describe('cleanRemoteFiles', () => {
 
     expect(thrownError).not.toBe(null);
     expect(thrownError).toBeInstanceOf(Error);
+  });
 
-    // Test ssh error
+  it('should reject when ssh connection fails', async () => {
     connection = {
       execCommand: jest.fn(() => Promise.reject(new Error()))
     };
 
-    thrownError = null;
+    let thrownError = null;
 
     try {
       await cleanRemoteFiles(backup, connection);
