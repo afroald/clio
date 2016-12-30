@@ -2,8 +2,13 @@ const u = require('updeep');
 
 const backup = u.freeze({
   server: null,
-  remote: {},
-  local: {}
+  remote: {
+    files: []
+  },
+  local: {
+    tmpDir: process.env.TMP_DIR,
+    files: []
+  }
 });
 
 function createBackup(server, options = {}) {

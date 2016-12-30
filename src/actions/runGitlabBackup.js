@@ -24,9 +24,9 @@ async function runGitlabBackup(backup, connection) {
       actions: {
         [runGitlabBackup.name]: command
       },
-      files: [
+      files: files => [].concat(files, [
         path.join(gitlabBackupPath, backupFileName)
-      ]
+      ])
     }
   }, backup);
 }

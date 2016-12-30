@@ -37,9 +37,12 @@ describe('createTmpDir', () => {
       }))
     };
 
+    let errorThrown = false;
+
     try {
       await createTmpDir(backup, connection);
     } catch (error) {
+      errorThrown = true;
       expect(error).toBeInstanceOf(CommandFailedError);
       expect(error).toEqual(expect.stringMatching('createTmpDir'));
       expect(error.command).toEqual(expect.objectContaining({
@@ -48,6 +51,8 @@ describe('createTmpDir', () => {
         stderr: 'stderr'
       }));
     }
+
+    expect(errorThrown).toBe(true);
   });
 
   it('should execute mkdir -p on the remote server', async () => {
@@ -68,9 +73,9 @@ describe('createTmpDir', () => {
     const newBackup = await createTmpDir(backup, connection);
 
     expect(newBackup).toEqual(expect.objectContaining({
-      remote: {
+      remote: expect.objectContaining({
         tmpDir: backup.server.config.tmpDir
-      }
+      })
     }));
   });
 });

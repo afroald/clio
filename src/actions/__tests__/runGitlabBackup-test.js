@@ -78,10 +78,15 @@ describe('runGitlabBackup', () => {
       }))
     };
 
+    let errorThrown = false;
+
     try {
       await runGitlabBackup(backup, connection);
     } catch (error) {
+      errorThrown = true;
       expect(error).toBeInstanceOf(Error);
     }
+
+    expect(errorThrown).toBe(true);
   });
 });

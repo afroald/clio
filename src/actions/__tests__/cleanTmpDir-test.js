@@ -36,9 +36,12 @@ describe('cleanTmpDir', () => {
       }))
     };
 
+    let errorThrown = false;
+
     try {
       await cleanTmpDir(backup, connection);
     } catch (error) {
+      errorThrown = true;
       expect(error).toBeInstanceOf(CommandFailedError);
       expect(error).toEqual(expect.stringMatching('cleanTmpDir'));
       expect(error.command).toEqual(expect.objectContaining({
@@ -47,6 +50,8 @@ describe('cleanTmpDir', () => {
         stderr: 'stderr'
       }));
     }
+
+    expect(errorThrown).toBe(true);
   });
 
   it('should do nothing if no tmpDir is known', async () => {
