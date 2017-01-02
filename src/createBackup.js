@@ -1,18 +1,9 @@
 const u = require('updeep');
 
-const backup = u.freeze({
-  server: null,
-  remote: {
-    files: []
-  },
-  local: {
-    tmpDir: process.env.TMP_DIR,
-    files: []
-  }
-});
+const backup = require('./backup');
 
 function createBackup(server, options = {}) {
-  return u(Object.assign({ server }, options), backup);
+  return u(u({ server }, options), backup);
 }
 
 module.exports = createBackup;
