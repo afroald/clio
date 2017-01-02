@@ -1,6 +1,9 @@
 const u = require('updeep');
 
 const backup = u.freeze({
+  start: null,
+  end: null,
+  duration: null,
   server: null,
   remote: {
     files: []

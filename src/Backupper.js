@@ -1,21 +1,34 @@
 const SSH = require('node-ssh');
+const u = require('updeep');
+
 const createBackup = require('./createBackup');
 const runActions = require('./runActions');
 
 class Backupper {
-  constructor() {
+  constructor({ reporter } = { reporter: null }) {
     this.connections = {};
+    this.reporter = reporter;
   }
 
   async backup(server) {
-    const backup = createBackup(server);
+    let backup = createBackup(server);
+    this.reporter.onBackupStart(backup);
+
     const connection = await this.getConnectionForServer(server);
 
     // Execute all actions for this server
     // TODO: handle errors
-    await runActions(backup, connection);
+    await runActions(backup, connection, this.reporter);
 
     connection.dispose();
+
+    const end = new Date();
+    backup = u({
+      end,
+      duration: end.getTime() - backup.start.getTime()
+    }, backup);
+
+    this.reporter.onBackupEnd(backup);
   }
 
   async getConnectionForServer({ hostname, ssh }) {
@@ -23,14 +36,14 @@ class Backupper {
       return this.connections[hostname];
     }
 
-    console.log('Connecting to %s', hostname);
+    this.reporter.onTaskStart('Connecting');
     const client = new SSH();
     const connection = client.connect(ssh);
 
     this.connections[hostname] = connection;
 
     return connection.then(() => {
-      console.log('Connected to %s', hostname);
+      this.reporter.onTaskEnd();
       return connection;
     });
   }

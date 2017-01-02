@@ -1,0 +1,7 @@
+#!/usr/bin/env node
+
+require('babel-register');
+
+const cli = require('../src/cli');
+
+cli();

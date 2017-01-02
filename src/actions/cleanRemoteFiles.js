@@ -13,11 +13,15 @@ async function cleanFile(file, connection) {
   return file;
 }
 
-async function cleanRemoteFiles(backup, connection) {
+async function cleanRemoteFiles(backup, connection, reporter) {
+  reporter.onTaskStart('Cleaning remote files');
+
   const remoteFiles = backup.remote.files;
 
   const tasks = remoteFiles.map(remoteFile => () => cleanFile(remoteFile, connection));
   const cleanedFiles = await reducePromises(tasks);
+
+  reporter.onTaskEnd();
 
   return u({
     remote: {

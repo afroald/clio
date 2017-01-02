@@ -1,7 +1,9 @@
 const path = require('path');
 const u = require('updeep');
 
-async function downloadRemoteFiles(backup, connection) {
+async function downloadRemoteFiles(backup, connection, reporter) {
+  reporter.onTaskStart('Downloading files');
+
   const downloadedFiles = [];
 
   await Promise.all(backup.remote.files.map((remoteFile) => {
@@ -9,12 +11,13 @@ async function downloadRemoteFiles(backup, connection) {
       const fileName = path.basename(remoteFile);
       const localPath = path.join(backup.local.tmpDir, fileName);
 
-      console.log('Downloading %s', fileName);
       await connection.getFile(remoteFile, localPath);
 
       downloadedFiles.push(localPath);
     })();
   }));
+
+  reporter.onTaskEnd();
 
   return u({
     local: {

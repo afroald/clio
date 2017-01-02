@@ -10,3 +10,4 @@ https://en.wikipedia.org/wiki/Clio
 
 ## Possible useful packages
 - https://www.npmjs.com/package/meow
+- https://github.com/chalk/chalk
