@@ -1,3 +1,4 @@
+const fs = require('fs');
 const moment = require('moment');
 const path = require('path');
 const u = require('updeep');
@@ -5,15 +6,28 @@ const u = require('updeep');
 const exec = require('../exec');
 const reducePromises = require('../reducePromises');
 
+function destinationExists(destination) {
+  return new Promise((resolve) => {
+    fs.access(destination, (error) => {
+      resolve(!error);
+    });
+  });
+}
+
 async function copyFile(file, destination) {
-  await exec(`cp "${file}" "${destination}"`);
+  await exec(`cp -n "${file}" "${destination}"`);
   return destination;
 }
 
 async function archiveFiles(backup) {
   const filesToArchive = backup.local.encryptedFiles;
   const today = moment().format('YYYY-MM-DD');
-  const destination = path.join(backup.local.storageDir, today);
+  let destination = path.join(backup.local.storageDir, today);
+
+  if (await destinationExists(destination)) {
+    const todayExtended = moment().format('YYYY-MM-DD-HHmmss');
+    destination = path.join(backup.local.storageDir, todayExtended);
+  }
 
   await exec(`mkdir -p "${destination}"`);
 

@@ -1,9 +1,11 @@
 /* eslint-env node, jest */
 
-const path = require('path');
-const moment = require('moment');
-
+jest.mock('fs');
 jest.mock('../../exec');
+
+const fs = require('fs');
+const moment = require('moment');
+const path = require('path');
 
 const testStorageDir = '/tmp';
 const expectedDestination = path.join(testStorageDir, moment().format('YYYY-MM-DD'));
@@ -20,6 +22,8 @@ describe('archiveFiles', () => {
 
   beforeEach(() => {
     exec.mockClear();
+
+    fs.__setDirectories([testStorageDir]);
 
     backup = createBackup(server, {
       local: {
@@ -44,6 +48,12 @@ describe('archiveFiles', () => {
   it('should create the destination dir', async () => {
     await archiveFiles(backup);
     expect(exec).toHaveBeenCalledWith(expect.stringMatching(`"${expectedDestination}"`));
+  });
+
+  it('should create a different destination dir if it already exists', async () => {
+    fs.__setDirectories([expectedDestination]);
+    await archiveFiles(backup);
+    expect(exec).toHaveBeenCalledWith(expect.stringMatching(new RegExp(`"${expectedDestination}-.*"`)));
   });
 
   it('should copy all files', async () => {
