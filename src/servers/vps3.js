@@ -1,4 +1,6 @@
 const u = require('updeep');
+
+const archiveFiles = require('../actions/archiveFiles');
 const cleanRemoteFiles = require('../actions/cleanRemoteFiles');
 const encryptFiles = require('../actions/encryptFiles');
 const downloadRemoteFiles = require('../actions/downloadRemoteFiles');
@@ -17,7 +19,7 @@ const vps3 = u({
     downloadRemoteFiles,
     cleanRemoteFiles,
     encryptFiles,
-    // figure out place to put files
+    archiveFiles
     // clean local tmp files
   ]
 }, server);
