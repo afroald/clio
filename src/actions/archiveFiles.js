@@ -33,7 +33,7 @@ async function archiveFiles(backup) {
 
   const copyOperations = filesToArchive.map((file) => {
     const fileDestination = path.join(destination, path.basename(file));
-    return async () => copyFile(file, fileDestination);
+    return () => copyFile(file, fileDestination);
   });
 
   const movedFiles = await reducePromises(copyOperations);

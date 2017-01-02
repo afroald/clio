@@ -33,7 +33,7 @@ describe('cleanRemoteFiles', () => {
     expect(connection.execCommand).toHaveBeenCalledTimes(2);
 
     backup.remote.files.forEach((file) => {
-      expect(connection.execCommand).toHaveBeenCalledWith(`rm -f ${file}`);
+      expect(connection.execCommand).toHaveBeenCalledWith(expect.stringMatching(`"${file}"`));
     });
   });
 

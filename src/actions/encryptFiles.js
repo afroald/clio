@@ -17,7 +17,7 @@ async function encryptFiles(backup) {
     throw new Error('No gpg recipient known. Unable to encrypt files!');
   }
 
-  const encryptOperations = files.map(file => async () => encryptFile(file, recipient));
+  const encryptOperations = files.map(file => () => encryptFile(file, recipient));
   const encryptedFiles = await reducePromises(encryptOperations);
 
   return u({

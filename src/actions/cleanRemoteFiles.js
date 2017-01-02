@@ -4,7 +4,7 @@ const CommandFailedError = require('../errors/CommandFailedError');
 const reducePromises = require('../reducePromises');
 
 async function cleanFile(file, connection) {
-  const command = await connection.execCommand(`rm -f ${file}`);
+  const command = await connection.execCommand(`rm -f "${file}"`);
 
   if (command.code !== 0) {
     throw new CommandFailedError(cleanFile.name, command);
@@ -16,7 +16,7 @@ async function cleanFile(file, connection) {
 async function cleanRemoteFiles(backup, connection) {
   const remoteFiles = backup.remote.files;
 
-  const tasks = remoteFiles.map(remoteFile => async () => cleanFile(remoteFile, connection));
+  const tasks = remoteFiles.map(remoteFile => () => cleanFile(remoteFile, connection));
   const cleanedFiles = await reducePromises(tasks);
 
   return u({
