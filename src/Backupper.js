@@ -1,6 +1,6 @@
 const SSH = require('node-ssh');
 const createBackup = require('./createBackup');
-const createRemoteBackup = require('./steps/createRemoteBackup');
+const runActions = require('./runActions');
 
 class Backupper {
   constructor() {
@@ -10,16 +10,12 @@ class Backupper {
   async backup(server) {
     const backup = createBackup(server);
     const connection = await this.getConnectionForServer(server);
-    try {
-      const remoteBackup = await createRemoteBackup(backup, connection);
-      console.log(remoteBackup);
-    } catch (error) {
-      console.log('Failed to create remote Backup');
-      throw error;
-    }
+
+    // Execute all actions for this server
+    // TODO: handle errors
+    await runActions(backup, connection);
+
     connection.dispose();
-    // const localBackup = await downloadBackup(remoteBackup, dest);
-    // const encryptedBackup = await encryptBackup(localBackup);
   }
 
   async getConnectionForServer({ hostname, ssh }) {

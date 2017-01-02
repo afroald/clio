@@ -1,5 +1,6 @@
 const u = require('updeep');
 const cleanRemoteFiles = require('../actions/cleanRemoteFiles');
+const encryptFiles = require('../actions/encryptFiles');
 const downloadRemoteFiles = require('../actions/downloadRemoteFiles');
 const runGitlabBackup = require('../actions/runGitlabBackup');
 const server = require('./server');
@@ -14,7 +15,10 @@ const vps3 = u({
   actions: [
     runGitlabBackup,
     downloadRemoteFiles,
-    cleanRemoteFiles
+    cleanRemoteFiles,
+    encryptFiles,
+    // figure out place to put files
+    // clean local tmp files
   ]
 }, server);
 
