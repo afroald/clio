@@ -10,7 +10,7 @@ async function encryptFile(file, recipient) {
 }
 
 async function encryptFiles(backup, connection, reporter) {
-  reporter.onTaskStart('Encrypting files');
+  reporter.taskStart('Encrypting files');
 
   const recipient = process.env.GPG_RECIPIENT;
   const files = backup.local.files;
@@ -22,7 +22,7 @@ async function encryptFiles(backup, connection, reporter) {
   const encryptOperations = files.map(file => () => encryptFile(file, recipient));
   const encryptedFiles = await reducePromises(encryptOperations);
 
-  reporter.onTaskEnd();
+  reporter.taskSucceeded();
 
   return u({
     local: {

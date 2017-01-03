@@ -11,7 +11,7 @@ async function cleanFile(path) {
 }
 
 async function cleanLocalFiles(backup, connection, reporter) {
-  reporter.onTaskStart('Cleaning local temporary files');
+  reporter.taskStart('Cleaning local temporary files');
 
   const filesToClean = possibleFileLists.reduce((files, property) => {
     if (backup.local[property] && backup.local[property] instanceof Array) {
@@ -37,7 +37,7 @@ async function cleanLocalFiles(backup, connection, reporter) {
     };
   });
 
-  reporter.onTaskEnd();
+  reporter.taskSucceeded();
 
   return u({ local: updates }, backup);
 }

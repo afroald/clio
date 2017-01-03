@@ -20,7 +20,7 @@ async function copyFile(file, destination) {
 }
 
 async function archiveFiles(backup, connection, reporter) {
-  reporter.onTaskStart('Archiving files');
+  reporter.taskStart('Archiving files');
 
   const filesToArchive = backup.local.encryptedFiles;
   const today = moment().format('YYYY-MM-DD');
@@ -38,14 +38,12 @@ async function archiveFiles(backup, connection, reporter) {
     return () => copyFile(file, fileDestination);
   });
 
-  const movedFiles = await reducePromises(copyOperations);
+  const archivedFiles = await reducePromises(copyOperations);
 
-  reporter.onTaskEnd();
+  reporter.taskSucceeded();
 
   return u({
-    local: {
-      archivedFiles: movedFiles
-    }
+    local: { archivedFiles }
   }, backup);
 }
 

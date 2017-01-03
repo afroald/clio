@@ -2,7 +2,7 @@ const path = require('path');
 const u = require('updeep');
 
 async function downloadRemoteFiles(backup, connection, reporter) {
-  reporter.onTaskStart('Downloading files');
+  reporter.taskStart('Downloading files');
 
   const downloadedFiles = [];
 
@@ -17,7 +17,7 @@ async function downloadRemoteFiles(backup, connection, reporter) {
     })();
   }));
 
-  reporter.onTaskEnd();
+  reporter.taskSucceeded();
 
   return u({
     local: {

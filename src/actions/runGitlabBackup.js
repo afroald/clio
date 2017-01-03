@@ -5,7 +5,7 @@ const CommandFailedError = require('../errors/CommandFailedError');
 const gitlabBackupPath = '/var/opt/gitlab/backups';
 
 async function runGitlabBackup(backup, connection, reporter) {
-  reporter.onTaskStart('Backing up Gitlab');
+  reporter.taskStart('Backing up Gitlab');
 
   const command = await connection.execCommand('sudo gitlab-rake gitlab:backup:create');
 
@@ -19,7 +19,7 @@ async function runGitlabBackup(backup, connection, reporter) {
   }
   const backupFileName = matches[1];
 
-  reporter.onTaskEnd();
+  reporter.taskSucceeded();
 
   return u({
     remote: {

@@ -7,7 +7,7 @@ dotenv.config({
 });
 
 const Backupper = require('./Backupper');
-const ConsoleReporter = require('./ConsoleReporter');
+const ConsoleReporter = require('./reporters/ConsoleReporter');
 const servers = require('./servers');
 
 function cli() {

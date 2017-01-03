@@ -12,7 +12,7 @@ class Backupper {
 
   async backup(server) {
     let backup = createBackup(server);
-    this.reporter.onBackupStart(backup);
+    this.reporter.backupStart(backup);
 
     const connection = await this.getConnectionForServer(server);
 
@@ -28,7 +28,7 @@ class Backupper {
       duration: end.getTime() - backup.start.getTime()
     }, backup);
 
-    this.reporter.onBackupEnd(backup);
+    this.reporter.backupEnd(backup);
   }
 
   async getConnectionForServer({ hostname, ssh }) {
@@ -36,14 +36,14 @@ class Backupper {
       return this.connections[hostname];
     }
 
-    this.reporter.onTaskStart('Connecting');
+    this.reporter.taskStart('Connecting');
     const client = new SSH();
     const connection = client.connect(ssh);
 
     this.connections[hostname] = connection;
 
     return connection.then(() => {
-      this.reporter.onTaskEnd();
+      this.reporter.taskSucceeded();
       return connection;
     });
   }
