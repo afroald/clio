@@ -13,13 +13,18 @@ async function encryptFiles(backup, connection, reporter) {
   reporter.taskStart('Encrypting files');
 
   const recipient = process.env.GPG_RECIPIENT;
-  const files = backup.local.files;
+  const filesToEncrypt = backup.local.files;
+
+  if (!filesToEncrypt || filesToEncrypt.length === 0) {
+    reporter.taskSkipped('No files to encrypt');
+    return backup;
+  }
 
   if (!recipient) {
     throw new Error('No gpg recipient known. Unable to encrypt files!');
   }
 
-  const encryptOperations = files.map(file => () => encryptFile(file, recipient));
+  const encryptOperations = filesToEncrypt.map(file => () => encryptFile(file, recipient));
   const encryptedFiles = await reducePromises(encryptOperations);
 
   reporter.taskSucceeded();

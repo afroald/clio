@@ -21,6 +21,11 @@ async function cleanLocalFiles(backup, connection, reporter) {
     return files;
   }, []);
 
+  if (filesToClean.length === 0) {
+    reporter.taskSkipped('No local temporary files to clean');
+    return backup;
+  }
+
   const cleanOperations = filesToClean.map(file => () => cleanFile(file));
   const cleanedFiles = await reducePromises(cleanOperations);
 

@@ -26,6 +26,11 @@ async function archiveFiles(backup, connection, reporter) {
   const today = moment().format('YYYY-MM-DD');
   let destination = path.join(backup.local.storageDir, today);
 
+  if (!filesToArchive || filesToArchive.length === 0) {
+    reporter.taskSkipped('No files to archive');
+    return backup;
+  }
+
   if (await destinationExists(destination)) {
     const todayExtended = moment().format('YYYY-MM-DD-HHmmss');
     destination = path.join(backup.local.storageDir, todayExtended);

@@ -18,6 +18,11 @@ async function cleanRemoteFiles(backup, connection, reporter) {
 
   const remoteFiles = backup.remote.files;
 
+  if (!remoteFiles || remoteFiles.length === 0) {
+    reporter.taskSkipped('No remote files to clean');
+    return backup;
+  }
+
   const tasks = remoteFiles.map(remoteFile => () => cleanFile(remoteFile, connection));
   const cleanedFiles = await reducePromises(tasks);
 
