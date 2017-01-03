@@ -4,23 +4,23 @@ process.env.TMP_DIR = '/tmp';
 
 const path = require('path');
 
-const CommandFailedError = require('../../errors/CommandFailedError');
+const BaseReporter = require('../../reporters/BaseReporter');
 const createBackup = require('../../createBackup');
 const downloadRemoteFiles = require('../downloadRemoteFiles');
 const server = require('../../servers/server');
 
-
-const backup = createBackup(server, {
-  remote: {
-    files: [
-      'file1',
-      'file2'
-    ]
-  }
-});
-
 describe('downloadRemoteFiles', () => {
+  const reporter = new BaseReporter();
   let connection;
+
+  const backup = createBackup(server, {
+    remote: {
+      files: [
+        'file1',
+        'file2'
+      ]
+    }
+  });
 
   beforeEach(() => {
     connection = {
@@ -29,13 +29,13 @@ describe('downloadRemoteFiles', () => {
   });
 
   it('should return a promise', () => {
-    const promise = downloadRemoteFiles(backup, connection);
+    const promise = downloadRemoteFiles(backup, connection, reporter);
 
     expect(promise).toBeInstanceOf(Promise);
   });
 
   it('should not modify the original backup', async () => {
-    const newBackup = await downloadRemoteFiles(backup, connection);
+    const newBackup = await downloadRemoteFiles(backup, connection, reporter);
 
     expect(newBackup).not.toBe(backup);
   });
@@ -48,7 +48,7 @@ describe('downloadRemoteFiles', () => {
     let errorThrown = false;
 
     try {
-      await downloadRemoteFiles(backup, connection);
+      await downloadRemoteFiles(backup, connection, reporter);
     } catch (error) {
       errorThrown = true;
     }
@@ -57,13 +57,13 @@ describe('downloadRemoteFiles', () => {
   });
 
   it('should call getFile for each remote file', async () => {
-    await downloadRemoteFiles(backup, connection);
+    await downloadRemoteFiles(backup, connection, reporter);
 
     expect(connection.getFile).toHaveBeenCalledTimes(2);
   });
 
   it('should set local paths on backup', async () => {
-    const newBackup = await downloadRemoteFiles(backup, connection);
+    const newBackup = await downloadRemoteFiles(backup, connection, reporter);
 
     expect(newBackup).toEqual(expect.objectContaining({
       local: expect.objectContaining({

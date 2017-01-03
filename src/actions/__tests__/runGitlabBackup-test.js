@@ -1,5 +1,6 @@
 /* eslint-env node, jest */
 
+const BaseReporter = require('../../reporters/BaseReporter');
 const CommandFailedError = require('../../errors/CommandFailedError');
 const createBackup = require('../../createBackup');
 const runGitlabBackup = require('./../runGitlabBackup');
@@ -8,6 +9,7 @@ const server = require('../../servers/server');
 const backup = createBackup(server);
 
 describe('runGitlabBackup', () => {
+  const reporter = new BaseReporter();
   let connection;
 
   beforeEach(() => {
@@ -20,13 +22,13 @@ describe('runGitlabBackup', () => {
   });
 
   it('should return a promise', () => {
-    const promise = runGitlabBackup(backup, connection);
+    const promise = runGitlabBackup(backup, connection, reporter);
 
     expect(promise).toBeInstanceOf(Promise);
   });
 
   it('should not modify the original backup', async () => {
-    const newBackup = await runGitlabBackup(backup, connection);
+    const newBackup = await runGitlabBackup(backup, connection, reporter);
 
     expect(newBackup).not.toBe(backup);
   });
@@ -39,7 +41,7 @@ describe('runGitlabBackup', () => {
     let thrownError = null;
 
     try {
-      await runGitlabBackup(backup, connection);
+      await runGitlabBackup(backup, connection, reporter);
     } catch (error) {
       thrownError = error;
     }
@@ -60,7 +62,7 @@ describe('runGitlabBackup', () => {
     let thrownError = null;
 
     try {
-      await runGitlabBackup(backup, connection);
+      await runGitlabBackup(backup, connection, reporter);
     } catch (error) {
       thrownError = error;
     }
@@ -70,14 +72,14 @@ describe('runGitlabBackup', () => {
   });
 
   it('should execute sudo gitlab-rake gitlab:backup:create on the remote server', async () => {
-    await runGitlabBackup(backup, connection);
+    await runGitlabBackup(backup, connection, reporter);
 
     expect(connection.execCommand)
       .toHaveBeenCalledWith(expect.stringMatching('sudo gitlab-rake gitlab:backup:create'));
   });
 
   it('should set the backup filename on the backup', async () => {
-    const newBackup = await runGitlabBackup(backup, connection);
+    const newBackup = await runGitlabBackup(backup, connection, reporter);
 
     expect(newBackup).toEqual(expect.objectContaining({
       remote: expect.objectContaining({
@@ -97,7 +99,7 @@ describe('runGitlabBackup', () => {
     let errorThrown = false;
 
     try {
-      await runGitlabBackup(backup, connection);
+      await runGitlabBackup(backup, connection, reporter);
     } catch (error) {
       errorThrown = true;
       expect(error).toBeInstanceOf(Error);

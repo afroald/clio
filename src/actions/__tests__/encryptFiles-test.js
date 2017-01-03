@@ -2,6 +2,7 @@
 
 jest.mock('../../exec');
 
+const BaseReporter = require('../../reporters/BaseReporter');
 const createBackup = require('../../createBackup');
 const encryptFiles = require('../encryptFiles');
 const exec = require('../../exec');
@@ -11,6 +12,8 @@ const testRecipient = 'testRecipient';
 process.env.GPG_RECIPIENT = testRecipient;
 
 describe('encryptFiles', () => {
+  const connection = null;
+  const reporter = new BaseReporter();
   let backup;
 
   beforeEach(() => {
@@ -27,23 +30,23 @@ describe('encryptFiles', () => {
   });
 
   it('should return a promise', () => {
-    const promise = encryptFiles(backup);
+    const promise = encryptFiles(backup, connection, reporter);
     expect(promise).toBeInstanceOf(Promise);
   });
 
   it('should not modify the original backup', async () => {
-    const newBackup = await encryptFiles(backup);
+    const newBackup = await encryptFiles(backup, connection, reporter);
     expect(newBackup).not.toBe(backup);
   });
 
   it('should call gpg with the correct recipient', async () => {
-    await encryptFiles(backup);
+    await encryptFiles(backup, connection, reporter);
 
     expect(exec).toHaveBeenCalledWith(expect.stringMatching(`"${testRecipient}"`));
   });
 
   it('should call gpg with the correct files', async () => {
-    await encryptFiles(backup);
+    await encryptFiles(backup, connection, reporter);
 
     backup.local.files.forEach((file) => {
       expect(exec).toHaveBeenCalledWith(expect.stringMatching(`"${file}"`));
@@ -51,7 +54,7 @@ describe('encryptFiles', () => {
   });
 
   it('should set encrypted files on the backup', async () => {
-    const newBackup = await encryptFiles(backup);
+    const newBackup = await encryptFiles(backup, connection, reporter);
     expect(newBackup).toEqual(expect.objectContaining({
       local: expect.objectContaining({
         encryptedFiles: [
@@ -68,7 +71,7 @@ describe('encryptFiles', () => {
     let thrownError = null;
 
     try {
-      await encryptFiles(backup);
+      await encryptFiles(backup, connection, reporter);
     } catch (error) {
       thrownError = error;
     }

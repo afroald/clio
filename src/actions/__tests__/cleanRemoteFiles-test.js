@@ -1,10 +1,12 @@
 /* eslint-env node, jest */
 
+const BaseReporter = require('../../reporters/BaseReporter');
 const cleanRemoteFiles = require('../cleanRemoteFiles');
 const createBackup = require('../../createBackup');
 const server = require('../../servers/server');
 
 describe('cleanRemoteFiles', () => {
+  const reporter = new BaseReporter();
   let backup;
   let connection;
 
@@ -24,12 +26,12 @@ describe('cleanRemoteFiles', () => {
   });
 
   it('should return a promise', () => {
-    const promise = cleanRemoteFiles(backup, connection);
+    const promise = cleanRemoteFiles(backup, connection, reporter);
     expect(promise).toBeInstanceOf(Promise);
   });
 
   it('should execute command for each file', async () => {
-    await cleanRemoteFiles(backup, connection);
+    await cleanRemoteFiles(backup, connection, reporter);
     expect(connection.execCommand).toHaveBeenCalledTimes(2);
 
     backup.remote.files.forEach((file) => {
@@ -38,7 +40,7 @@ describe('cleanRemoteFiles', () => {
   });
 
   it('should update files on backup', async () => {
-    const newBackup = await cleanRemoteFiles(backup, connection);
+    const newBackup = await cleanRemoteFiles(backup, connection, reporter);
     expect(newBackup).toEqual(expect.objectContaining({
       remote: expect.objectContaining({
         cleanedFiles: ['file1', 'file2'],
@@ -48,7 +50,7 @@ describe('cleanRemoteFiles', () => {
   });
 
   it('should not modify the original backup', async () => {
-    const newBackup = await cleanRemoteFiles(backup, connection);
+    const newBackup = await cleanRemoteFiles(backup, connection, reporter);
     expect(newBackup).not.toBe(backup);
   });
 
@@ -60,7 +62,7 @@ describe('cleanRemoteFiles', () => {
     let thrownError = null;
 
     try {
-      await cleanRemoteFiles(backup, connection);
+      await cleanRemoteFiles(backup, connection, reporter);
     } catch (error) {
       thrownError = error;
     }
@@ -77,7 +79,7 @@ describe('cleanRemoteFiles', () => {
     let thrownError = null;
 
     try {
-      await cleanRemoteFiles(backup, connection);
+      await cleanRemoteFiles(backup, connection, reporter);
     } catch (error) {
       thrownError = error;
     }

@@ -12,12 +12,15 @@ const expectedDestination = path.join(testStorageDir, moment().format('YYYY-MM-D
 process.env.STORAGE_DIR = testStorageDir;
 
 const archiveFiles = require('../archiveFiles');
+const BaseReporter = require('../../reporters/BaseReporter');
 const createBackup = require('../../createBackup');
 const exec = require('../../exec');
 const server = require('../../servers/server');
 
 
 describe('archiveFiles', () => {
+  const connection = null;
+  const reporter = new BaseReporter();
   let backup;
 
   beforeEach(() => {
@@ -36,28 +39,28 @@ describe('archiveFiles', () => {
   });
 
   it('should return a promise', () => {
-    const promise = archiveFiles(backup);
+    const promise = archiveFiles(backup, connection, reporter);
     expect(promise).toBeInstanceOf(Promise);
   });
 
   it('should not modify the original backup', async () => {
-    const newBackup = await archiveFiles(backup);
+    const newBackup = await archiveFiles(backup, connection, reporter);
     expect(newBackup).not.toBe(backup);
   });
 
   it('should create the destination dir', async () => {
-    await archiveFiles(backup);
+    await archiveFiles(backup, connection, reporter);
     expect(exec).toHaveBeenCalledWith(expect.stringMatching(`"${expectedDestination}"`));
   });
 
   it('should create a different destination dir if it already exists', async () => {
     fs.__setDirectories([expectedDestination]);
-    await archiveFiles(backup);
+    await archiveFiles(backup, connection, reporter);
     expect(exec).toHaveBeenCalledWith(expect.stringMatching(new RegExp(`"${expectedDestination}-.*"`)));
   });
 
   it('should copy all files', async () => {
-    await archiveFiles(backup);
+    await archiveFiles(backup, connection, reporter);
 
     backup.local.encryptedFiles.forEach((file) => {
       const expectedFileDestination = path.join(expectedDestination, path.basename(file));
@@ -72,7 +75,7 @@ describe('archiveFiles', () => {
     let thrownError = null;
 
     try {
-      await archiveFiles(backup);
+      await archiveFiles(backup, connection, reporter);
     } catch (error) {
       thrownError = error;
     }
