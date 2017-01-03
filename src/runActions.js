@@ -1,10 +1,16 @@
-async function runActions(backup, connection, reporter) {
+function runActions(backup, connection, reporter) {
   const actions = backup.server.actions;
 
-  return actions.reduce((previousStep, step) => {
-    return previousStep.then((updatedBackup) => {
-      return step(updatedBackup, connection, reporter);
-    });
+  return actions.reduce(async (backup, action) => {
+    let updatedBackup = await backup;
+
+    try {
+      updatedBackup = await action(updatedBackup, connection, reporter);
+    } catch (error) {
+      reporter.taskFailed(error.message);
+    }
+
+    return updatedBackup;
   }, Promise.resolve(backup));
 }
 
