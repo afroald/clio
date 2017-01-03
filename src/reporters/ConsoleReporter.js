@@ -1,4 +1,5 @@
 const chalk = require('chalk');
+const logSymbols = require('log-symbols');
 const moment = require('moment');
 const ora = require('ora');
 
@@ -19,7 +20,7 @@ class ConsoleReporter extends BaseReporter {
 
   backupEnd(backup) {
     const formattedDuration = `${moment.duration(backup.duration).asSeconds()}s`;
-    this.write(`✨  Done in ${formattedDuration}.`);
+    this.write(`✨ Done in ${formattedDuration}.`);
   }
 
   taskStart(description) {
@@ -38,7 +39,7 @@ class ConsoleReporter extends BaseReporter {
 
   taskSkipped(reason) {
     this.ora.text += ` - Skipped: ${reason}`;
-    this.ora.stopAndPersist('🕶 ');
+    this.ora.stopAndPersist(logSymbols.warning);
   }
 
   error() {}
