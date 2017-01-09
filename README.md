@@ -18,6 +18,11 @@ Actions are pure functions that receive the backup state container and return a 
 state container. Actions may not modify the state container. They should resolve with a modified copy of the state
 container if changes are wanted.
 
+## Experiments
+- async/await
+- TDD with [Jest](http://facebook.github.io/jest/)
+- Less classical inheritance ([Classical Inheritance is Obsolete](https://vimeo.com/69255635))
+
 ## To do
 - Logging (log backup state changes?)
 - Handle backup errors properly
