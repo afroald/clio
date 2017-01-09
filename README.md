@@ -16,7 +16,7 @@ perform the backup.
 
 Actions are pure functions that receive the backup state container and return a promise that resolves with the backup
 state container. Actions may not modify the state container. They should resolve with a modified copy of the state
-container if changes are wanted.
+container if changes are wanted. This is enforced by using [Updeep](https://www.npmjs.com/package/updeep).
 
 ## Experiments
 - async/await
