@@ -27,7 +27,7 @@ class Backupper {
   }
 
   async backup(serverName) {
-    let serversToBackup = [];
+    const serversToBackup = [];
 
     serversToBackup.push(getServer(serverName));
 
