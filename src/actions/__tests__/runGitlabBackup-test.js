@@ -4,7 +4,7 @@ const BaseReporter = require('../../reporters/BaseReporter');
 const CommandFailedError = require('../../errors/CommandFailedError');
 const createBackup = require('../../createBackup');
 const runGitlabBackup = require('./../runGitlabBackup');
-const server = require('../../servers/server');
+const server = require('../../server');
 
 const backup = createBackup(server);
 

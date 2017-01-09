@@ -3,7 +3,7 @@
 const CommandFailedError = require('../../errors/CommandFailedError');
 const createBackup = require('../../createBackup');
 const cleanTmpDir = require('./../cleanTmpDir');
-const server = require('../../servers/server');
+const server = require('../../server');
 
 describe('cleanTmpDir', () => {
   let backup;

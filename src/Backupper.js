@@ -2,7 +2,23 @@ const SSH = require('node-ssh');
 const u = require('updeep');
 
 const createBackup = require('./createBackup');
+const reducePromises = require('./reducePromises');
 const runActions = require('./runActions');
+
+function getServer(serverName) {
+  let server;
+  try {
+    server = require(`../servers/${serverName}`);
+  } catch (error) {
+    if (error.code === 'MODULE_NOT_FOUND') {
+      throw new Error(`Could not find server configuration for ${serverName}`);
+    }
+
+    throw error;
+  }
+
+  return server;
+}
 
 class Backupper {
   constructor({ reporter } = { reporter: null }) {
@@ -10,25 +26,33 @@ class Backupper {
     this.reporter = reporter;
   }
 
-  async backup(server) {
-    let backup = createBackup(server);
-    this.reporter.backupStart(backup);
+  async backup(serverName) {
+    let serversToBackup = [];
 
-    const connection = await this.getConnectionForServer(server);
+    serversToBackup.push(getServer(serverName));
 
-    // Execute all actions for this server
-    // TODO: handle errors
-    await runActions(backup, connection, this.reporter);
+    const backupsToRun = serversToBackup.map(server => async () => {
+      let backup = createBackup(server);
+      this.reporter.backupStart(backup);
 
-    connection.dispose();
+      const connection = await this.getConnectionForServer(server);
 
-    const end = new Date();
-    backup = u({
-      end,
-      duration: end.getTime() - backup.start.getTime()
-    }, backup);
+      // Execute all actions for this server
+      // TODO: handle errors
+      await runActions(backup, connection, this.reporter);
 
-    this.reporter.backupEnd(backup);
+      connection.dispose();
+
+      const end = new Date();
+      backup = u({
+        end,
+        duration: end.getTime() - backup.start.getTime()
+      }, backup);
+
+      this.reporter.backupEnd(backup);
+    });
+
+    await reducePromises(backupsToRun);
   }
 
   async getConnectionForServer({ hostname, ssh }) {

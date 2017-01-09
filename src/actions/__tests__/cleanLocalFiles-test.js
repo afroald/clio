@@ -6,7 +6,7 @@ const BaseReporter = require('../../reporters/BaseReporter');
 const cleanLocalFiles = require('../cleanLocalFiles');
 const createBackup = require('../../createBackup');
 const exec = require('../../exec');
-const server = require('../../servers/server');
+const server = require('../../server');
 
 describe('cleanLocalFiles', () => {
   const connection = null;

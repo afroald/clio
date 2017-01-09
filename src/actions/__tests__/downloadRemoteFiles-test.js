@@ -7,7 +7,7 @@ const path = require('path');
 const BaseReporter = require('../../reporters/BaseReporter');
 const createBackup = require('../../createBackup');
 const downloadRemoteFiles = require('../downloadRemoteFiles');
-const server = require('../../servers/server');
+const server = require('../../server');
 
 describe('downloadRemoteFiles', () => {
   const reporter = new BaseReporter();

@@ -6,7 +6,7 @@ const BaseReporter = require('../../reporters/BaseReporter');
 const createBackup = require('../../createBackup');
 const encryptFiles = require('../encryptFiles');
 const exec = require('../../exec');
-const server = require('../../servers/server');
+const server = require('../../server');
 
 const testRecipient = 'testRecipient';
 process.env.GPG_RECIPIENT = testRecipient;

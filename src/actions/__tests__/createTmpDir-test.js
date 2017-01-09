@@ -3,7 +3,7 @@
 const CommandFailedError = require('../../errors/CommandFailedError');
 const createBackup = require('../../createBackup');
 const createTmpDir = require('./../createTmpDir');
-const server = require('../../servers/server');
+const server = require('../../server');
 
 const backup = createBackup(server);
 

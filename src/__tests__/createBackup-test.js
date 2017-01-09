@@ -2,7 +2,7 @@
 
 const u = require('updeep');
 const createBackup = require('./../createBackup');
-const server = require('./../servers/server');
+const server = require('./../server');
 
 describe('createBackup', () => {
   it('should return an object with a server property', () => {

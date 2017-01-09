@@ -42,7 +42,9 @@ class ConsoleReporter extends BaseReporter {
     this.ora.stopAndPersist(logSymbols.warning);
   }
 
-  error() {}
+  error(error) {
+    
+  }
 
   write(message) {
     this.stdout.write(`${message}\n`);

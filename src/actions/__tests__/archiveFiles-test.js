@@ -15,7 +15,7 @@ const archiveFiles = require('../archiveFiles');
 const BaseReporter = require('../../reporters/BaseReporter');
 const createBackup = require('../../createBackup');
 const exec = require('../../exec');
-const server = require('../../servers/server');
+const server = require('../../server');
 
 
 describe('archiveFiles', () => {

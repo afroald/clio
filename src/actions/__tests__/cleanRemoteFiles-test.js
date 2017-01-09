@@ -3,7 +3,7 @@
 const BaseReporter = require('../../reporters/BaseReporter');
 const cleanRemoteFiles = require('../cleanRemoteFiles');
 const createBackup = require('../../createBackup');
-const server = require('../../servers/server');
+const server = require('../../server');
 
 describe('cleanRemoteFiles', () => {
   const reporter = new BaseReporter();
