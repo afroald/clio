@@ -1,14 +1,10 @@
 const u = require('updeep');
 
-const CommandFailedError = require('../errors/CommandFailedError');
+const execRemoteCommand = require('../execRemoteCommand');
 const reducePromises = require('../reducePromises');
 
 async function cleanFile(file, connection) {
-  const command = await connection.execCommand(`rm -f "${file}"`);
-
-  if (command.code !== 0) {
-    throw new CommandFailedError(cleanFile.name, command);
-  }
+  await execRemoteCommand(connection, `rm -f "${file}"`);
 
   return file;
 }

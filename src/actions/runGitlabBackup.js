@@ -1,17 +1,13 @@
 const path = require('path');
 const u = require('updeep');
-const CommandFailedError = require('../errors/CommandFailedError');
+const execRemoteCommand = require('../execRemoteCommand');
 
 const gitlabBackupPath = '/var/opt/gitlab/backups';
 
 async function runGitlabBackup(backup, connection, reporter) {
   reporter.taskStart('Backing up Gitlab');
 
-  const command = await connection.execCommand('sudo gitlab-rake gitlab:backup:create');
-
-  if (command.code !== 0) {
-    throw new CommandFailedError(runGitlabBackup.name, command);
-  }
+  const command = await execRemoteCommand(connection, 'sudo gitlab-rake gitlab:backup:create');
 
   const matches = command.stdout.match(/^Creating backup archive: (.*\.tar) \.\.\. done$/m);
   if (!matches[1]) {
