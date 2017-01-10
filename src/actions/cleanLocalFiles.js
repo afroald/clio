@@ -1,6 +1,6 @@
 const u = require('updeep');
 
-const exec = require('../exec');
+const exec = require('execa');
 const reducePromises = require('../reducePromises');
 
 const possibleFileLists = ['files', 'encryptedFiles'];
