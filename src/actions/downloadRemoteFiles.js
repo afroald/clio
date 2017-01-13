@@ -1,36 +1,32 @@
 const path = require('path');
 const u = require('updeep');
 
-const reducePromises = require('../reducePromises');
+const action = require('../action');
 
-async function downloadRemoteFiles(backup, connection, reporter) {
-  reporter.taskStart('Downloading files');
+module.exports = u({
+  title: 'Download files',
+  skip: () => backup => !backup.remote.files || backup.remote.files.length === 0,
+  action: () => async function downloadRemoteFiles(backup, connection, updater) {
+    const filesToDownload = backup.remote.files;
 
-  const filesToDownload = backup.remote.files;
+    const actions = filesToDownload.map((remoteFile) => {
+      const fileName = path.basename(remoteFile);
+      const destinationFile = path.join(backup.local.tmpDir, fileName);
 
-  if (!filesToDownload || filesToDownload.length === 0) {
-    reporter.taskSkipped('No files to download');
-    return backup;
+      return u({
+        title: `Downloading ${fileName}`,
+        action: () => async function downloadFile(backup, connection) {
+          await connection.getFile(remoteFile, destinationFile);
+
+          return u({
+            local: {
+              files: files => [].concat(files, [destinationFile])
+            }
+          }, backup);
+        }
+      }, action);
+    });
+
+    return updater.setSubActions(backup, actions);
   }
-
-  const downloadOperations = filesToDownload.map(remoteFile => async () => {
-    const fileName = path.basename(remoteFile);
-    const destinationFile = path.join(backup.local.tmpDir, fileName);
-
-    await connection.getFile(remoteFile, destinationFile);
-
-    return destinationFile;
-  });
-
-  const downloadedFiles = await reducePromises(downloadOperations);
-
-  reporter.taskSucceeded();
-
-  return u({
-    local: {
-      files: files => [].concat(files, downloadedFiles)
-    }
-  }, backup);
-}
-
-module.exports = downloadRemoteFiles;
+}, action);

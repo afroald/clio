@@ -54,6 +54,12 @@ function createActionUpdater(originalBackup, action, subAction) {
   const createUpdate = createUpdater(originalBackup, action, subAction);
 
   return {
+    setSubActions(backup, subActions) {
+      return u(createUpdate({
+        actions: subActions
+      }), backup);
+    },
+
     setState(backup, newState) {
       return u(createUpdate({ state: newState }), backup);
     },

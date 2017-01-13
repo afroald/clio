@@ -30,6 +30,27 @@ describe('createActionUpdater', () => {
     updater = createActionUpdater(backup, action);
   });
 
+  describe('setSubActions', () => {
+    it('should set actions on the specified action', () => {
+      const actions = [
+        'action1',
+        'action2'
+      ];
+
+      const updatedBackup = updater.setSubActions(backup, actions);
+
+      expect(updatedBackup).toEqual(expect.objectContaining({
+        server: expect.objectContaining({
+          actions: expect.arrayContaining([
+            expect.objectContaining({
+              actions: expect.arrayContaining(actions)
+            })
+          ])
+        })
+      }));
+    });
+  });
+
   describe('setState', () => {
     it('should update the state of the specified action', () => {
       const updatedBackup = updater.setState(backup, state.SKIPPED);

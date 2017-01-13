@@ -3,7 +3,7 @@ const util = require('util');
 
 class DebugRenderer {
   render(updatedBackup) {
-    logUpdate(util.inspect(updatedBackup, { depth: 5 }));
+    logUpdate(util.inspect(updatedBackup, { depth: 7 }));
   }
 
   end() {

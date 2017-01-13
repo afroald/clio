@@ -1,11 +1,10 @@
 const SSH = require('node-ssh');
 const u = require('updeep');
 
-const createActionUpdater = require('./action/createActionUpdater');
 const createBackup = require('./createBackup');
 const DebugRenderer = require('./renderers/DebugRenderer');
 const reducePromises = require('./reducePromises');
-const runAction = require('./action/runAction');
+const runActions = require('./action/runActions');
 
 function getServer(serverName) {
   let server;
@@ -45,24 +44,12 @@ class Backupper {
 
       this.renderer.render(backup);
 
-      // Execute all actions for this server
-      // TODO: handle errors
-      backup = await server.actions.reduce(async (previousAction, action) => {
-        let backup = await previousAction;
-
-        const updater = createActionUpdater(backup, action);
-        backup = await runAction({
-          backup,
-          connection,
-          action,
-          updater,
-          renderer: this.renderer
-        });
-
-        return backup;
-      }, Promise.resolve(backup));
-
-      this.renderer.render(backup);
+      backup = await runActions({
+        actions: backup.server.actions,
+        backup,
+        connection,
+        renderer: this.renderer
+      });
 
       connection.dispose();
 
