@@ -1,6 +1,6 @@
-const u = require('updeep');
+const { freeze } = require('updeep');
 
-const server = u.freeze({
+const server = freeze({
   hostname: '',
   config: {
     tmpDir: '/tmp/running-backup'

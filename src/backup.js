@@ -1,6 +1,6 @@
-const u = require('updeep');
+const { freeze } = require('updeep');
 
-const backup = u.freeze({
+const backup = freeze({
   start: null,
   end: null,
   duration: null,

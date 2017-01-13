@@ -26,5 +26,5 @@ container if changes are wanted. This is enforced by using [Updeep](https://www.
 ## To do
 - Logging (log backup state changes?)
 - Handle backup errors properly
-- Make console output nicer
+- Make console output nicer (https://github.com/samverschueren/listr)
 - Add Slack notifications

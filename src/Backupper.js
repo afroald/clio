@@ -1,12 +1,14 @@
 const SSH = require('node-ssh');
 const u = require('updeep');
 
+const actionUpdater = require('./action/actionUpdater');
 const createBackup = require('./createBackup');
+const DebugRenderer = require('./renderers/DebugRenderer');
 const reducePromises = require('./reducePromises');
-const runActions = require('./runActions');
 
 function getServer(serverName) {
   let server;
+
   try {
     server = require(`../servers/${serverName}`);
   } catch (error) {
@@ -21,9 +23,10 @@ function getServer(serverName) {
 }
 
 class Backupper {
-  constructor({ reporter } = { reporter: null }) {
+  constructor(options = {}) {
     this.connections = {};
-    this.reporter = reporter;
+
+    this.renderer = options.renderer || new DebugRenderer();
   }
 
   async backup(serverName) {
@@ -31,15 +34,48 @@ class Backupper {
 
     serversToBackup.push(getServer(serverName));
 
+    // console.log('Backing up servers:');
+    // serversToBackup.forEach(server => console.log(`- ${server.hostname}`));
+
     const backupsToRun = serversToBackup.map(server => async () => {
       let backup = createBackup(server);
-      this.reporter.backupStart(backup);
 
       const connection = await this.getConnectionForServer(server);
 
+      this.renderer.render(backup);
+
       // Execute all actions for this server
       // TODO: handle errors
-      await runActions(backup, connection, this.reporter);
+      const finishedBackup = await server.actions.reduce(async (previousAction, action) => {
+        let backup = await previousAction;
+
+        const updater = actionUpdater(action);
+        const skipReason = action.skip(backup);
+
+        if (skipReason !== false) {
+          // set state to skipped
+          backup = updater.skipped(backup, skipReason);
+        } else {
+          // set state to pending
+          backup = updater.pending(backup);
+          this.renderer.render(backup);
+
+          try {
+            backup = await action.action(backup, connection);
+            // set state to completed
+            backup = updater.completed(backup);
+          } catch (error) {
+            // set state to failed
+            backup = updater.failed(backup, error);
+          }
+        }
+
+        this.renderer.render(backup);
+
+        return backup;
+      }, Promise.resolve(backup));
+
+      this.renderer.render(finishedBackup);
 
       connection.dispose();
 
@@ -48,8 +84,6 @@ class Backupper {
         end,
         duration: end.getTime() - backup.start.getTime()
       }, backup);
-
-      this.reporter.backupEnd(backup);
     });
 
     await reducePromises(backupsToRun);
@@ -60,14 +94,12 @@ class Backupper {
       return this.connections[hostname];
     }
 
-    this.reporter.taskStart('Connecting');
     const client = new SSH();
     const connection = client.connect(ssh);
 
     this.connections[hostname] = connection;
 
     return connection.then(() => {
-      this.reporter.taskSucceeded();
       return connection;
     });
   }

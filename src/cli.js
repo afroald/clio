@@ -1,16 +1,12 @@
 const dotenv = require('dotenv');
 const meow = require('meow');
 const path = require('path');
-const util = require('util');
 
 dotenv.config({
   path: path.join(__dirname, '../.env')
 });
 
 const Backupper = require('./Backupper');
-const ConsoleReporter = require('./reporters/ConsoleReporter');
-
-
 
 function cli() {
   const cli = meow([
@@ -19,12 +15,11 @@ function cli() {
   ]);
 
   const serverName = cli.input[0];
-  const reporter = new ConsoleReporter();
-  const backupper = new Backupper({ reporter });
+  const backupper = new Backupper();
 
   backupper.backup(serverName)
     .catch((error) => {
-      reporter.error(error);
+      console.error(error);
       process.exitCode = 1;
     });
 }
