@@ -2,13 +2,13 @@ const path = require('path');
 const u = require('updeep');
 
 const execRemoteCommand = require('../execRemoteCommand');
-const action = require('../action/action');
+const action = require('../action');
 
 const gitlabBackupPath = '/var/opt/gitlab/backups';
 
 module.exports = u({
   title: 'Create Gitlab Backup',
-  action: u.constant(async (backup, connection) => {
+  action: () => async function createGitlabBackup(backup, connection) {
     const command = await execRemoteCommand(connection, 'sudo gitlab-rake gitlab:backup:create');
 
     const matches = command.stdout.match(/^Creating backup archive: (.*\.tar) \.\.\. done$/m);
@@ -24,5 +24,5 @@ module.exports = u({
         ])
       }
     }, backup);
-  })
+  }
 }, action);
