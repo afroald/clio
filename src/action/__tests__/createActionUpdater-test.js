@@ -5,7 +5,7 @@ const u = require('updeep');
 const createActionUpdater = require('../createActionUpdater');
 const baseAction = require('../action');
 const baseServer = require('../../server');
-const createBackup = require('../../createBackup');
+const createBackup = require('../../backup/createBackup');
 const state = require('../state');
 
 describe('createActionUpdater', () => {

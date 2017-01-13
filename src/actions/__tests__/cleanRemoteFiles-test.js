@@ -4,7 +4,7 @@ const u = require('updeep');
 
 const cleanRemoteFiles = require('../cleanRemoteFiles');
 const createActionUpdater = require('../../action/createActionUpdater');
-const createBackup = require('../../createBackup');
+const createBackup = require('../../backup/createBackup');
 const baseServer = require('../../server');
 
 describe('cleanRemoteFiles', () => {

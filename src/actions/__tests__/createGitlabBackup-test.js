@@ -1,6 +1,6 @@
 /* eslint-env node, jest */
 
-const createBackup = require('../../createBackup');
+const createBackup = require('../../backup/createBackup');
 const createGitlabBackup = require('../createGitlabBackup');
 const CommandFailedError = require('../../errors/CommandFailedError');
 const server = require('../../server');

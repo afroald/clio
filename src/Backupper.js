@@ -1,7 +1,7 @@
 const SSH = require('node-ssh');
 const u = require('updeep');
 
-const createBackup = require('./createBackup');
+const createBackup = require('./backup/createBackup');
 const DebugRenderer = require('./renderers/DebugRenderer');
 const reducePromises = require('./reducePromises');
 const runActions = require('./action/runActions');

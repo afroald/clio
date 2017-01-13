@@ -1,8 +1,7 @@
 /* eslint-env node, jest */
 
-const u = require('updeep');
-const createBackup = require('./../createBackup');
-const server = require('./../server');
+const createBackup = require('../createBackup');
+const server = require('../../server');
 
 describe('createBackup', () => {
   it('should return an object with a server property', () => {
