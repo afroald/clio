@@ -26,13 +26,16 @@ async function runActions({ actions, backup, connection, renderer }) {
             const updater = createActionUpdater(backup, action, subAction);
 
             backup = updater.pending(backup);
+            renderer.render(backup);
 
             try {
               backup = await subAction.action(backup, connection);
-              backup = updater.complete(backup);
+              backup = updater.completed(backup);
             } catch (error) {
               backup = updater.failed(backup, error);
             }
+
+            renderer.render(backup);
 
             return backup;
           }, Promise.resolve(backup));

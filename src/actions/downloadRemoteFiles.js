@@ -4,7 +4,7 @@ const u = require('updeep');
 const action = require('../action');
 
 module.exports = u({
-  title: 'Download files',
+  title: 'Download remote files',
   skip: () => backup => !backup.remote.files || backup.remote.files.length === 0,
   action: () => async function downloadRemoteFiles(backup, connection, updater) {
     const filesToDownload = backup.remote.files;

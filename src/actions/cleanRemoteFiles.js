@@ -1,39 +1,32 @@
+const path = require('path');
 const u = require('updeep');
 
+const action = require('../action');
 const execRemoteCommand = require('../execRemoteCommand');
-const reducePromises = require('../reducePromises');
 
-async function cleanFile(file, connection) {
-  await execRemoteCommand(connection, `rm -f "${file}"`);
+module.exports = u({
+  title: 'Clean remote files',
+  skip: () => backup => !backup.remote.files || backup.remote.files.length === 0,
+  action: () => async function cleanRemoteFiles(backup, connection, updater) {
+    const filesToClean = backup.remote.files;
 
-  return file;
-}
+    const actions = filesToClean.map((remoteFile) => {
+      const fileName = path.basename(remoteFile);
+      return u({
+        title: `Cleaning ${fileName}`,
+        action: () => async function cleanFile(backup, connection) {
+          await execRemoteCommand(connection, `rm -f "${remoteFile}"`);
 
-async function cleanRemoteFiles(backup, connection, reporter) {
-  reporter.taskStart('Cleaning remote files');
+          return u({
+            remote: {
+              cleanedFiles: files => [].concat(files || [], remoteFile),
+              files: files => files.filter(file => file !== remoteFile)
+            }
+          }, backup);
+        }
+      }, action);
+    });
 
-  const remoteFiles = backup.remote.files;
-
-  if (!remoteFiles || remoteFiles.length === 0) {
-    reporter.taskSkipped('No remote files to clean');
-    return backup;
+    return updater.setSubActions(backup, actions);
   }
-
-  const tasks = remoteFiles.map(remoteFile => () => cleanFile(remoteFile, connection));
-  const cleanedFiles = await reducePromises(tasks);
-
-  reporter.taskSucceeded();
-
-  return u({
-    remote: {
-      cleanedFiles,
-      files: (files) => {
-        return files.filter((file) => {
-          return cleanedFiles.indexOf(file) === -1;
-        });
-      }
-    }
-  }, backup);
-}
-
-module.exports = cleanRemoteFiles;
+}, action);
