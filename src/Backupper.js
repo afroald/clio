@@ -1,10 +1,11 @@
 const SSH = require('node-ssh');
 const u = require('updeep');
 
-const actionUpdater = require('./action/actionUpdater');
+const createActionUpdater = require('./action/createActionUpdater');
 const createBackup = require('./createBackup');
 const DebugRenderer = require('./renderers/DebugRenderer');
 const reducePromises = require('./reducePromises');
+const runAction = require('./action/runAction');
 
 function getServer(serverName) {
   let server;
@@ -46,36 +47,22 @@ class Backupper {
 
       // Execute all actions for this server
       // TODO: handle errors
-      const finishedBackup = await server.actions.reduce(async (previousAction, action) => {
+      backup = await server.actions.reduce(async (previousAction, action) => {
         let backup = await previousAction;
 
-        const updater = actionUpdater(action);
-        const skipReason = action.skip(backup);
-
-        if (skipReason !== false) {
-          // set state to skipped
-          backup = updater.skipped(backup, skipReason);
-        } else {
-          // set state to pending
-          backup = updater.pending(backup);
-          this.renderer.render(backup);
-
-          try {
-            backup = await action.action(backup, connection);
-            // set state to completed
-            backup = updater.completed(backup);
-          } catch (error) {
-            // set state to failed
-            backup = updater.failed(backup, error);
-          }
-        }
-
-        this.renderer.render(backup);
+        const updater = createActionUpdater(backup, action);
+        backup = await runAction({
+          backup,
+          connection,
+          action,
+          updater,
+          renderer: this.renderer
+        });
 
         return backup;
       }, Promise.resolve(backup));
 
-      this.renderer.render(finishedBackup);
+      this.renderer.render(backup);
 
       connection.dispose();
 
@@ -84,6 +71,8 @@ class Backupper {
         end,
         duration: end.getTime() - backup.start.getTime()
       }, backup);
+
+      this.renderer.render(backup);
     });
 
     await reducePromises(backupsToRun);
