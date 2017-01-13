@@ -2,13 +2,13 @@
 
 const u = require('updeep');
 
-const actionUpdater = require('../actionUpdater');
+const createActionUpdater = require('../createActionUpdater');
 const baseAction = require('../action');
 const baseServer = require('../../server');
 const createBackup = require('../../createBackup');
 const state = require('../state');
 
-describe('actionUpdater', () => {
+describe('createActionUpdater', () => {
   let action;
   let backup;
   let server;
@@ -17,7 +17,7 @@ describe('actionUpdater', () => {
   beforeEach(() => {
     action = u({
       title: 'Test action',
-      action: u.constant(() => {})
+      action: () => () => {}
     }, baseAction);
 
     server = u({
@@ -27,7 +27,7 @@ describe('actionUpdater', () => {
     }, baseServer);
 
     backup = createBackup(server);
-    updater = actionUpdater(action);
+    updater = createActionUpdater(backup, action);
   });
 
   describe('setState', () => {
@@ -65,6 +65,45 @@ describe('actionUpdater', () => {
           actions: expect.arrayContaining([
             expect.objectContaining({
               state: state.COMPLETED
+            })
+          ])
+        })
+      }));
+    });
+
+    it('should be able to update a sub-action', () => {
+      const subAction = u({
+        title: 'Test sub-action',
+        action: () => () => {}
+      }, baseAction);
+
+      action = u({
+        title: 'Test action',
+        action: () => () => {},
+        actions: [
+          subAction
+        ]
+      }, baseAction);
+
+      server = u({
+        actions: [
+          action
+        ]
+      }, baseServer);
+
+      backup = createBackup(server);
+      updater = createActionUpdater(backup, action, subAction);
+
+      const updatedBackup = updater.pending(backup);
+      expect(updatedBackup).toEqual(expect.objectContaining({
+        server: expect.objectContaining({
+          actions: expect.arrayContaining([
+            expect.objectContaining({
+              actions: expect.arrayContaining([
+                expect.objectContaining({
+                  state: state.PENDING
+                })
+              ])
             })
           ])
         })
