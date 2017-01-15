@@ -7,6 +7,7 @@ dotenv.config({
 });
 
 const Backupper = require('./Backupper');
+const ConsoleRenderer = require('./renderers/ConsoleRenderer');
 
 function cli() {
   const cli = meow([
@@ -15,7 +16,8 @@ function cli() {
   ]);
 
   const serverName = cli.input[0];
-  const backupper = new Backupper();
+  const renderer = new ConsoleRenderer();
+  const backupper = new Backupper({ renderer });
 
   backupper.backup(serverName)
     .catch((error) => {
