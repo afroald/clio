@@ -16,7 +16,7 @@ module.exports = u({
       return u({
         title: `Downloading ${filename}`,
         action: () => async function downloadFile(backup, connection) {
-          await connection.getFile(remoteFile, destinationFile);
+          await connection.getFile(destinationFile, remoteFile);
 
           return u({
             local: {
