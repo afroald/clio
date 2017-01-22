@@ -11,9 +11,10 @@ module.exports = u({
     const filesToClean = backup.remote.files;
 
     const actions = filesToClean.map((remoteFile) => {
-      const fileName = path.basename(remoteFile);
+      const filename = path.basename(remoteFile);
+
       return u({
-        title: `Cleaning ${fileName}`,
+        title: `Cleaning ${filename}`,
         action: () => async function cleanFile(backup, connection) {
           await execRemoteCommand(connection, `rm -f "${remoteFile}"`);
 

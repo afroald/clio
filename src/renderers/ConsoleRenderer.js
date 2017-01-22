@@ -13,7 +13,7 @@ const skippedSymbol = chalk.yellow(figures.arrowDown);
 
 function getSymbol(action, spinner) {
   if (action.state === state.PENDING) {
-    return chalk.yellow(spinner());
+    return action.actions ? pointer : chalk.yellow(spinner);
   }
 
   if (action.state === state.COMPLETED) {
@@ -56,7 +56,7 @@ function render(backup, spinner) {
 
   output.push(`Backing up ${backup.server.hostname}`);
 
-  output = output.concat(renderActions(backup.server.actions, spinner));
+  output = output.concat(renderActions(backup.server.actions, spinner()));
 
   if (backup.duration) {
     const duration = moment.duration(backup.duration);
@@ -88,6 +88,8 @@ class ConsoleRenderer {
   end() {
     clearInterval(this.timer);
     this.timer = null;
+
+    render(this.backup, this.spinner);
 
     logUpdate.done();
   }

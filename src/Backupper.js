@@ -60,6 +60,7 @@ class Backupper {
       }, backup);
 
       this.renderer.render(backup);
+      this.renderer.end();
     });
 
     await reducePromises(backupsToRun);
@@ -75,9 +76,7 @@ class Backupper {
 
     this.connections[hostname] = connection;
 
-    return connection.then(() => {
-      return connection;
-    });
+    return connection.then(() => connection);
   }
 }
 

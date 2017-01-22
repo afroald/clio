@@ -10,11 +10,11 @@ module.exports = u({
     const filesToDownload = backup.remote.files;
 
     const actions = filesToDownload.map((remoteFile) => {
-      const fileName = path.basename(remoteFile);
-      const destinationFile = path.join(backup.local.tmpDir, fileName);
+      const filename = path.basename(remoteFile);
+      const destinationFile = path.join(backup.local.tmpDir, filename);
 
       return u({
-        title: `Downloading ${fileName}`,
+        title: `Downloading ${filename}`,
         action: () => async function downloadFile(backup, connection) {
           await connection.getFile(remoteFile, destinationFile);
 

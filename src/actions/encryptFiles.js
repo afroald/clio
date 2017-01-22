@@ -1,39 +1,34 @@
+const path = require('path');
 const u = require('updeep');
 
 const exec = require('execa');
-const reducePromises = require('../reducePromises');
+const action = require('../action');
 
-async function encryptFile(file, recipient) {
-  await exec(`gpg --encrypt --batch --yes --recipient "${recipient}" "${file}"`);
+module.exports = u({
+  title: 'Encrypt files',
+  skip: () => backup => !backup.local.files || backup.local.files.length === 0,
+  action: () => async function encryptFiles(backup, connection, updater) {
+    const filesToEncrypt = backup.local.files;
+    const recipient = process.env.GPG_RECIPIENT;
 
-  return `${file}.gpg`;
-}
+    const actions = filesToEncrypt.map(file => {
+      const filename = path.basename(file);
 
-async function encryptFiles(backup, connection, reporter) {
-  reporter.taskStart('Encrypting files');
+      return u({
+        title: `Encrypting ${filename}`,
+        action: () => async function encryptFile(backup) {
+          const encryptedFile = `${file}.gpg`;
+          await exec.shell(`gpg --encrypt --batch --yes --recipient "${recipient}" "${file}"`);
 
-  const recipient = process.env.GPG_RECIPIENT;
-  const filesToEncrypt = backup.local.files;
+          return u({
+            local: {
+              encryptedFiles: files => [].concat(files || [], [encryptedFile])
+            }
+          }, backup);
+        }
+      }, action);
+    });
 
-  if (!filesToEncrypt || filesToEncrypt.length === 0) {
-    reporter.taskSkipped('No files to encrypt');
-    return backup;
+    return updater.setSubActions(backup, actions);
   }
-
-  if (!recipient) {
-    throw new Error('No gpg recipient known. Unable to encrypt files!');
-  }
-
-  const encryptOperations = filesToEncrypt.map(file => () => encryptFile(file, recipient));
-  const encryptedFiles = await reducePromises(encryptOperations);
-
-  reporter.taskSucceeded();
-
-  return u({
-    local: {
-      encryptedFiles
-    }
-  }, backup);
-}
-
-module.exports = encryptFiles;
+}, action);

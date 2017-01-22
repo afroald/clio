@@ -1,50 +1,33 @@
+const exec = require('execa');
+const path = require('path');
 const u = require('updeep');
 
-const exec = require('execa');
-const reducePromises = require('../reducePromises');
+const action = require('../action');
 
-const possibleFileLists = ['files', 'encryptedFiles'];
+module.exports = u({
+  title: 'Clean local files',
+  skip: () => backup => ['files', 'encryptedFiles'].every(list => !backup.local[list] || backup.local[list].length === 0),
+  action: () => async function cleanLocalFiles(backup, connection, updater) {
+    const filesToClean = [].concat(backup.local.files || [], backup.local.encryptedFiles || []);
 
-async function cleanFile(path) {
-  await exec(`rm -f "${path}"`);
-  return path;
-}
+    const actions = filesToClean.map((file) => {
+      const filename = path.basename(file);
 
-async function cleanLocalFiles(backup, connection, reporter) {
-  reporter.taskStart('Cleaning local temporary files');
+      return u({
+        title: `Cleaning ${filename}`,
+        action: () => async function cleanFile(backup) {
+          await exec('rm', ['-f', file]);
 
-  const filesToClean = possibleFileLists.reduce((files, property) => {
-    if (backup.local[property] && backup.local[property] instanceof Array) {
-      return [].concat(files, backup.local[property]);
-    }
+          return u({
+            local: {
+              files: files => files.filter(listedFile => listedFile !== file),
+              encryptedFiles: files => files.filter(listedFile => listedFile !== file)
+            }
+          }, backup);
+        }
+      }, action);
+    });
 
-    return files;
-  }, []);
-
-  if (filesToClean.length === 0) {
-    reporter.taskSkipped('No local temporary files to clean');
-    return backup;
+    return updater.setSubActions(backup, actions);
   }
-
-  const cleanOperations = filesToClean.map(file => () => cleanFile(file));
-  const cleanedFiles = await reducePromises(cleanOperations);
-
-  const updates = { cleanedFiles };
-  possibleFileLists.forEach((property) => {
-    if (!backup.local[property]) {
-      return;
-    }
-
-    updates[property] = (files) => {
-      return files.filter((file) => {
-        return cleanedFiles.indexOf(file) === -1;
-      });
-    };
-  });
-
-  reporter.taskSucceeded();
-
-  return u({ local: updates }, backup);
-}
-
-module.exports = cleanLocalFiles;
+}, action);
