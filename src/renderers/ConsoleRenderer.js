@@ -39,7 +39,7 @@ function renderActions(actions, spinner, level = 0) {
 
     output.push(indentString(` ${getSymbol(action, spinner)} ${action.title}${skipped}`, level, '  '));
 
-    if (action.actions) {
+    if (action.actions && action.state !== state.COMPLETED) {
       output = output.concat(renderActions(action.actions, spinner, level + 1));
     }
 
