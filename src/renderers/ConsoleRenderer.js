@@ -40,11 +40,49 @@ function renderActions(actions, spinner, level = 0) {
     output.push(indentString(` ${getSymbol(action, spinner)} ${action.title}${skipped}`, level, '  '));
 
     if (action.actions && action.state !== state.COMPLETED) {
-      output = output.concat(renderActions(action.actions, spinner, level + 1));
+      let actionsToRender = action.actions.slice(0);
+
+      if (actionsToRender.length > 9) {
+        const completedIndexes = actionsToRender.reduce((indexes, subAction, index) => {
+          if (subAction.state !== state.COMPLETED) {
+            return indexes;
+          }
+
+          return [].concat(indexes, [index]);
+        }, []);
+        const allowedCompleted = completedIndexes.slice(-5);
+
+        const waitingIndexes = actionsToRender.reduce((indexes, subAction, index) => {
+          if (subAction.state !== null) {
+            return indexes;
+          }
+
+          return [].concat(indexes, [index]);
+        }, []);
+        const allowedWaiting = waitingIndexes.slice(0, 5);
+
+        actionsToRender = actionsToRender.filter((subAction, index) => {
+          if (subAction.state === state.PENDING || subAction.state === state.FAILED) {
+            return true;
+          }
+
+          if (subAction.state === state.COMPLETED) {
+            return allowedCompleted.indexOf(index) !== -1;
+          }
+
+          if (subAction.state === null) {
+            return allowedWaiting.indexOf(index) !== -1;
+          }
+
+          return false;
+        });
+      }
+
+      output = output.concat(renderActions(actionsToRender, spinner, level + 1));
     }
 
-    if (action.state === state.FAILED) {
-      output.push(action.error);
+    if (action.state === state.FAILED && action.error) {
+      output.push(indentString(` ${action.error}`, level + 2, '  '));
     }
   });
 
