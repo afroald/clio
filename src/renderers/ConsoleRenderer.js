@@ -1,35 +1,11 @@
 const chalk = require('chalk');
 const elegantSpinner = require('elegant-spinner');
-const figures = require('figures');
 const indentString = require('indent-string');
-const logSymbols = require('log-symbols');
 const logUpdate = require('log-update');
 const moment = require('moment');
 
+const { filterSubActions, getSymbol } = require('./utils');
 const state = require('../action/state');
-
-const pointer = chalk.yellow(figures.pointer);
-const skippedSymbol = chalk.yellow(figures.arrowDown);
-
-function getSymbol(action, spinner) {
-  if (action.state === state.PENDING) {
-    return action.actions ? pointer : chalk.yellow(spinner);
-  }
-
-  if (action.state === state.COMPLETED) {
-    return logSymbols.success;
-  }
-
-  if (action.state === state.FAILED) {
-    return logSymbols.error;
-  }
-
-  if (action.state === state.SKIPPED) {
-    return skippedSymbol;
-  }
-
-  return ' ';
-}
 
 function renderActions(actions, spinner, level = 0) {
   let output = [];
@@ -40,41 +16,8 @@ function renderActions(actions, spinner, level = 0) {
     output.push(indentString(` ${getSymbol(action, spinner)} ${action.title}${skipped}`, level, '  '));
 
     if (action.actions && action.state !== state.COMPLETED) {
-      let actionsToRender = action.actions.slice(0);
-
-      if (actionsToRender.length > 9) {
-        const completedIndexes = actionsToRender.reduce((indexes, subAction, index) => {
-          if (subAction.state !== state.COMPLETED) {
-            return indexes;
-          }
-
-          return [].concat(indexes, [index]);
-        }, []);
-        const allowedCompleted = completedIndexes.slice(-5);
-
-        const waitingIndexes = actionsToRender.reduce((indexes, subAction, index) => {
-          if (subAction.state !== null) {
-            return indexes;
-          }
-
-          return [].concat(indexes, [index]);
-        }, []);
-        const allowedWaiting = waitingIndexes.slice(0, 5);
-
-        actionsToRender = actionsToRender.filter((subAction, index) => {
-          if (subAction.state === state.COMPLETED) {
-            return allowedCompleted.indexOf(index) !== -1;
-          }
-
-          if (subAction.state === null) {
-            return allowedWaiting.indexOf(index) !== -1;
-          }
-
-          return true;
-        });
-      }
-
-      output = output.concat(renderActions(actionsToRender, spinner, level + 1));
+      const subActionsToRender = filterSubActions(action.actions);
+      output = output.concat(renderActions(subActionsToRender, spinner, level + 1));
     }
 
     if (action.state === state.FAILED && action.error) {
