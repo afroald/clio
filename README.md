@@ -24,9 +24,9 @@ container if changes are wanted. This is enforced by using [Updeep](https://www.
 - Less classical inheritance ([Classical Inheritance is Obsolete](https://vimeo.com/69255635))
 
 ## To do
-- Archive to server specific dir
 - Improve console output (show progress)
 - Create and clean local tmp dir
 - Clean virtualmin backup
 - Verbose renderer
 - Add Slack notifications
+- Make project easier to start using
