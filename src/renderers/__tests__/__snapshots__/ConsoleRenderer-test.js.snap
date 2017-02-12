@@ -20,5 +20,6 @@ exports[`ConsoleRenderer renders correctly 1`] = `
  [31m✖[39m Failed action
      Something went wrong
  [33m↓[39m Skipped action [2m[skipped][22m
-   Waiting action"
+   Waiting action
+ ✨ Done in 1m 23s"
 `;

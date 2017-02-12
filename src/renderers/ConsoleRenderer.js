@@ -94,7 +94,7 @@ function render(backup, spinner) {
 
   if (backup.duration) {
     const duration = moment.duration(backup.duration);
-    output.push(`✨  Done in ${duration.minutes()}m ${duration.seconds()}`);
+    output.push(` ✨ Done in ${duration.minutes()}m ${duration.seconds()}s`);
   }
 
   logUpdate(output.join('\n'));

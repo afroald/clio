@@ -115,7 +115,9 @@ describe('ConsoleRenderer', () => {
       ]
     }, server);
 
-    backup = createBackup(server);
+    backup = createBackup(server, {
+      duration: 83000 // 1m 23s in milliseconds
+    });
 
     renderer.render(backup);
     renderer.end();
