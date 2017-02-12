@@ -12,7 +12,7 @@ module.exports = u({
     const command = await execRemoteCommand(connection, 'sudo gitlab-rake gitlab:backup:create');
 
     const matches = command.stdout.match(/^Creating backup archive: (.*\.tar) \.\.\. done$/m);
-    if (!matches[1]) {
+    if (!matches || !matches[1]) {
       throw new Error('Could not find backup name in output');
     }
     const backupFileName = matches[1];
