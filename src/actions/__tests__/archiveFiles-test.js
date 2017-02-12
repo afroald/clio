@@ -14,6 +14,7 @@ const baseServer = require('../../server');
 
 describe('archiveFiles', () => {
   const server = u({
+    hostname: 'test.clio',
     actions: [
       archiveFiles
     ]
@@ -83,7 +84,7 @@ describe('archiveFiles', () => {
       expect(updatedBackup).toEqual(expect.objectContaining({
         local: expect.objectContaining({
           encryptedFiles: ['file1.gpg', 'file2.gpg'],
-          archivedFiles: [path.join(testStorageDir, moment().format('YYYY-MM-DD'), 'file1.gpg')]
+          archivedFiles: [path.join(testStorageDir, updatedBackup.server.hostname, moment().format('YYYY-MM-DD-HHmmss'), 'file1.gpg')]
         })
       }));
     });
