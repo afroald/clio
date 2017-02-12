@@ -34,9 +34,6 @@ class Backupper {
 
     serversToBackup.push(getServer(serverName));
 
-    // console.log('Backing up servers:');
-    // serversToBackup.forEach(server => console.log(`- ${server.hostname}`));
-
     const backupsToRun = serversToBackup.map(server => async () => {
       let backup = createBackup(server);
 
