@@ -9,7 +9,6 @@ const backup = freeze({
     files: []
   },
   local: {
-    tmpDir: process.env.TMP_DIR,
     storageDir: process.env.STORAGE_DIR,
     files: []
   }

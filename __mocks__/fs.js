@@ -19,4 +19,8 @@ function access(path, callback) {
 fs.__setDirectories = __setDirectories;
 fs.access = access;
 
+fs.mkdtemp = jest.fn((prefix, callback) => {
+  callback(null, `${prefix}test`);
+});
+
 module.exports = fs;

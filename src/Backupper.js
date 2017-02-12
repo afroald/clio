@@ -2,6 +2,8 @@ const SSH = require('node-ssh');
 const u = require('updeep');
 
 const createBackup = require('./backup/createBackup');
+const createBackupTmpDir = require('./backup/createBackupTmpDir');
+const cleanBackupTmpDir = require('./backup/cleanBackupTmpDir');
 const DebugRenderer = require('./renderers/DebugRenderer');
 const reducePromises = require('./reducePromises');
 const runActions = require('./action/runActions');
@@ -36,6 +38,7 @@ class Backupper {
 
     const backupsToRun = serversToBackup.map(server => async () => {
       let backup = createBackup(server);
+      backup = await createBackupTmpDir(backup);
 
       const connection = await this.getConnectionForServer(server);
 
@@ -55,6 +58,8 @@ class Backupper {
         end,
         duration: end.getTime() - backup.start.getTime()
       }, backup);
+
+      backup = await cleanBackupTmpDir(backup);
 
       this.renderer.render(backup);
       this.renderer.end();
