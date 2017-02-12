@@ -10,7 +10,7 @@ function getServer(serverName) {
   let server;
 
   try {
-    server = require(`../servers/${serverName}`);
+    server = require(`../servers/${serverName}`); // eslint-disable-line global-require, import/no-dynamic-require
   } catch (error) {
     if (error.code === 'MODULE_NOT_FOUND') {
       throw new Error(`Could not find server configuration for ${serverName}`);

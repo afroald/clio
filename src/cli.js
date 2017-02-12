@@ -10,12 +10,12 @@ const Backupper = require('./Backupper');
 const ConsoleRenderer = require('./renderers/ConsoleRenderer');
 
 function cli() {
-  const cli = meow([
+  const terminal = meow([
     'Usage',
     '  clio [server]'
   ]);
 
-  const serverName = cli.input[0];
+  const serverName = terminal.input[0];
   const renderer = new ConsoleRenderer();
   const backupper = new Backupper({ renderer });
 

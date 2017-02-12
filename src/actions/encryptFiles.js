@@ -11,7 +11,7 @@ module.exports = u({
     const filesToEncrypt = backup.local.files;
     const recipient = process.env.GPG_RECIPIENT;
 
-    const actions = filesToEncrypt.map(file => {
+    const actions = filesToEncrypt.map((file) => {
       const filename = path.basename(file);
 
       return u({

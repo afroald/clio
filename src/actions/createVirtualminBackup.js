@@ -6,7 +6,7 @@ const execRemoteCommand = require('../execRemoteCommand');
 
 module.exports = u({
   title: 'Create Virtualmin backup',
-  action: () => async function createVirtualminBackup(backup, connection, updater) {
+  action: () => async function createVirtualminBackup(backup, connection) {
     const virtualminBackup = await execRemoteCommand(connection, 'sudo backup-virtualmin');
 
     const matches = virtualminBackup.stdout.match(/Backup location: "(.*)"/);

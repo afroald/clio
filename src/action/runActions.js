@@ -2,7 +2,7 @@ const createActionUpdater = require('./createActionUpdater');
 const state = require('./state');
 
 async function runActions({ actions, backup, connection, renderer }) {
-  return await actions.reduce(async (previousAction, action, index) => {
+  return actions.reduce(async (previousAction, action, index) => {
     let backup = await previousAction;
 
     const skipReason = action.skip(backup);

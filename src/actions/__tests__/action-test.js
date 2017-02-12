@@ -1,9 +1,16 @@
 /* eslint-env node, jest */
 
+/* eslint-disable global-require */
 const actions = [
+  require('../archiveFiles'),
+  require('../cleanLocalFiles'),
   require('../cleanRemoteFiles'),
-  require('../createGitlabBackup')
+  require('../createGitlabBackup'),
+  require('../createVirtualminBackup'),
+  require('../downloadRemoteFiles'),
+  require('../encryptFiles')
 ];
+/* eslint-enable */
 
 const actionStructure = expect.objectContaining({
   title: expect.any(String),
