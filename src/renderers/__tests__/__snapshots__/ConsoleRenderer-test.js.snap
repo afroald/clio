@@ -1,0 +1,24 @@
+exports[`ConsoleRenderer renders correctly 1`] = `
+"Backing up undefined
+ [32m✔[39m Completed action
+ [33m⠙[39m Pending action
+ [33m❯[39m Pending action with sub-actions
+   [31m✖[39m Failed sub-action
+       Something went wrong
+   [32m✔[39m Completed sub-action 3
+   [33m↓[39m Skipped sub-action [2m[skipped][22m
+   [32m✔[39m Completed sub-action 4
+   [32m✔[39m Completed sub-action 5
+   [32m✔[39m Completed sub-action 6
+   [32m✔[39m Completed sub-action 7
+   [33m⠙[39m Pending sub-action
+     Waiting sub-action 1
+     Waiting sub-action 2
+     Waiting sub-action 3
+     Waiting sub-action 4
+     Waiting sub-action 5
+ [31m✖[39m Failed action
+     Something went wrong
+ [33m↓[39m Skipped action [2m[skipped][22m
+   Waiting action"
+`;

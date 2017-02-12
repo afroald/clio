@@ -62,10 +62,6 @@ function renderActions(actions, spinner, level = 0) {
         const allowedWaiting = waitingIndexes.slice(0, 5);
 
         actionsToRender = actionsToRender.filter((subAction, index) => {
-          if (subAction.state === state.PENDING || subAction.state === state.FAILED) {
-            return true;
-          }
-
           if (subAction.state === state.COMPLETED) {
             return allowedCompleted.indexOf(index) !== -1;
           }
@@ -74,7 +70,7 @@ function renderActions(actions, spinner, level = 0) {
             return allowedWaiting.indexOf(index) !== -1;
           }
 
-          return false;
+          return true;
         });
       }
 
