@@ -4,7 +4,7 @@ const indentString = require('indent-string');
 const logUpdate = require('log-update');
 const moment = require('moment');
 
-const { filterSubActions, getSymbol } = require('./utils');
+const { filterSubActions, getActionStats, getSymbol } = require('./utils');
 const state = require('../action/state');
 
 function renderActions(actions, spinner, level = 0) {
@@ -13,7 +13,11 @@ function renderActions(actions, spinner, level = 0) {
   actions.forEach((action) => {
     const skipped = action.state === state.SKIPPED ? ` ${chalk.dim('[skipped]')}` : '';
 
-    output.push(indentString(` ${getSymbol(action, spinner)} ${action.title}${skipped}`, level, '  '));
+    let actionRow = indentString(` ${getSymbol(action, spinner)} ${action.title}${skipped}`, level, '  ');
+    if (action.actions) {
+      actionRow += ` (${getActionStats(action)})`;
+    }
+    output.push(actionRow);
 
     if (action.actions && action.state !== state.COMPLETED) {
       const subActionsToRender = filterSubActions(action.actions);

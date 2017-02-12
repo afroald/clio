@@ -64,3 +64,27 @@ module.exports.filterSubActions = function filterSubActions(subActions) {
 
   return filteredSubActions;
 };
+
+module.exports.getActionStats = function getActionStats(action) {
+  if (!action.actions || action.actions.length <= 0) {
+    return '';
+  }
+
+  const subActions = action.actions;
+  const numTotal = subActions.length;
+  const numDone = subActions.filter(subAction => subAction.state !== null && subAction.state !== state.PENDING).length;
+  const numFailed = subActions.filter(subAction => subAction.state === state.FAILED).length;
+  const numSkipped = subActions.filter(subAction => subAction.state === state.SKIPPED).length;
+
+  let stats = `${numDone}/${numTotal}`;
+
+  if (numFailed > 0) {
+    stats += `, ${numFailed} failed`;
+  }
+
+  if (numSkipped > 0) {
+    stats += `, ${numSkipped} skipped`;
+  }
+
+  return stats;
+};

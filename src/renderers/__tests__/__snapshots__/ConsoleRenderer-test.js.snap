@@ -2,7 +2,7 @@ exports[`ConsoleRenderer renders correctly 1`] = `
 "Backing up undefined
  [32m✔[39m Completed action
  [33m⠙[39m Pending action
- [33m❯[39m Pending action with sub-actions
+ [33m❯[39m Pending action with sub-actions (9/17, 1 failed, 1 skipped)
    [31m✖[39m Failed sub-action
        Something went wrong
    [32m✔[39m Completed sub-action 3
