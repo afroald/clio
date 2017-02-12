@@ -22,7 +22,7 @@
     "meow": "^3.7.0",
     "moment": "^2.17.1",
     "node-ssh": "^4.0.0",
-    "ora": "^0.4.0",
+    "ora": "^1.1.0",
     "updeep": "^1.0.0"
   },
   "devDependencies": {
@@ -32,7 +32,7 @@
     "eslint-plugin-import": "^2.2.0",
     "eslint-plugin-jsx-a11y": "^4.0.0",
     "eslint-plugin-react": "^6.9.0",
-    "jest": "^18.0.0"
+    "jest": "^18.1.0"
   },
   "jest": {
     "testEnvironment": "node",
