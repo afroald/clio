@@ -2,7 +2,7 @@ const chalk = require('chalk');
 const elegantSpinner = require('elegant-spinner');
 const indentString = require('indent-string');
 const logUpdate = require('log-update');
-const moment = require('moment');
+const prettyMs = require('pretty-ms');
 
 const { filterSubActions, getActionStats, getSymbol } = require('./utils');
 const state = require('../action/state');
@@ -40,8 +40,7 @@ function render(backup, spinner) {
   output = output.concat(renderActions(backup.server.actions, spinner()));
 
   if (backup.duration) {
-    const duration = moment.duration(backup.duration);
-    output.push(` ✨ Done in ${duration.minutes()}m ${duration.seconds()}s`);
+    output.push(` ✨ Done in ${prettyMs(backup.duration)}`);
   }
 
   logUpdate(output.join('\n'));
