@@ -6,7 +6,6 @@ const logUpdate = require('log-update');
 const u = require('updeep');
 
 const actionState = require('../../action/state');
-const baseServer = require('../../server');
 const baseAction = require('../../action');
 const ConsoleRenderer = require('../ConsoleRenderer');
 const createBackup = require('../../backup/createBackup');
@@ -22,7 +21,7 @@ describe('ConsoleRenderer', () => {
   });
 
   it('renders correctly', () => {
-    server = u({
+    server = {
       actions: [
         u({
           title: 'Completed action',
@@ -113,7 +112,7 @@ describe('ConsoleRenderer', () => {
           title: 'Waiting action'
         }, baseAction)
       ]
-    }, server);
+    };
 
     backup = createBackup(server, {
       duration: 83000 // 1m 23s in milliseconds
