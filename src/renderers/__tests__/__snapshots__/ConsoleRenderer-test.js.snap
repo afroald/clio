@@ -1,3 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
 exports[`ConsoleRenderer renders correctly 1`] = `
 "Backing up undefined
  [32m✔[39m Completed action
