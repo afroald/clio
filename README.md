@@ -27,3 +27,4 @@ container if changes are wanted. This is enforced by using [Updeep](https://www.
 - Verbose renderer
 - Add Slack notifications
 - Make project easier to start using
+- Possibility to configure how many backups to keep
