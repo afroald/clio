@@ -8,37 +8,31 @@ const DebugRenderer = require('./renderers/DebugRenderer');
 const reducePromises = require('./reducePromises');
 const runActions = require('./action/runActions');
 
-function getServer(serverName) {
-  let server;
-
-  try {
-    server = require(`../servers/${serverName}`); // eslint-disable-line global-require, import/no-dynamic-require
-  } catch (error) {
-    if (error.code === 'MODULE_NOT_FOUND') {
-      throw new Error(`Could not find server configuration for ${serverName}`);
-    }
-
-    throw error;
-  }
-
-  return server;
-}
-
 class Backupper {
-  constructor(options = {}) {
+  constructor(config = {}) {
     this.connections = {};
+    this.config = config;
 
-    this.renderer = options.renderer || new DebugRenderer();
+    this.renderer = config.renderer || new DebugRenderer();
   }
 
   async backup(serverName) {
-    const serversToBackup = [];
+    let serversToBackup;
 
-    serversToBackup.push(getServer(serverName));
+    if (serverName === 'all') {
+      serversToBackup = this.config.servers;
+    } else {
+      const serverToBackup = this.config.servers.find(server => server.hostname === serverName);
+      serversToBackup = [serverToBackup];
+    }
 
     const backupsToRun = serversToBackup.map(server => async () => {
-      let backup = createBackup(server);
-      backup = await createBackupTmpDir(backup);
+      let backup = createBackup(server, {
+        local: {
+          storageDir: this.config.paths.storage,
+        },
+      });
+      backup = await createBackupTmpDir(backup, this.config.paths.tmp);
 
       const connection = await this.getConnectionForServer(server);
 

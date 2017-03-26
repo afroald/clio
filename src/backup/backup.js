@@ -9,7 +9,7 @@ const backup = freeze({
     files: [],
   },
   local: {
-    storageDir: process.env.STORAGE_DIR,
+    storageDir: null,
     files: [],
   },
 });

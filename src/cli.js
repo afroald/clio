@@ -1,29 +1,51 @@
-const dotenv = require('dotenv');
+/* eslint-disable no-console */
+
 const meow = require('meow');
 const path = require('path');
 
-dotenv.config({
-  path: path.join(__dirname, '../.env'),
-});
-
 const Backupper = require('./Backupper');
 const ConsoleRenderer = require('./renderers/ConsoleRenderer');
+const defaultConfig = require('./config/defaultConfig');
 
-function cli() {
-  const terminal = meow([
-    'Usage',
-    '  clio [server]',
-  ]);
-
-  const serverName = terminal.input[0];
+function backupCommand(config, serverName) {
   const renderer = new ConsoleRenderer();
-  const backupper = new Backupper({ renderer });
+  const backupper = new Backupper(Object.assign({}, config, { renderer }));
 
   backupper.backup(serverName)
     .catch((error) => {
       console.error(error);
       process.exitCode = 1;
     });
+}
+
+function listCommand(config) {
+  console.log('Available server configurations:');
+  config.servers.forEach((server) => {
+    console.log(`  - ${server.hostname}`);
+  });
+}
+
+function cli() {
+  const terminal = meow([
+    'Usage',
+    '  clio [command]',
+  ]);
+
+  const command = terminal.input[0];
+  const config = require(path.resolve(defaultConfig.paths.config, 'clio.config')); // eslint-disable-line
+
+  switch (command) {
+    case 'backup':
+      backupCommand(config, terminal.input[1]);
+      break;
+    case 'list':
+      listCommand(config);
+      break;
+    default:
+      console.error('No command specified');
+      terminal.showHelp(1);
+      break;
+  }
 }
 
 module.exports = cli;
