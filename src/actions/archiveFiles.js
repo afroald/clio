@@ -19,7 +19,7 @@ module.exports = u({
   skip: () => backup => !backup.local.encryptedFiles || backup.local.encryptedFiles.length === 0,
   action: () => async function archiveFiles(backup, connection, updater) {
     const filesToArchive = backup.local.encryptedFiles;
-    const serverStorage = path.join(backup.local.storageDir, backup.server.hostname);
+    const serverStorage = path.join(backup.config.paths.storage, backup.server.hostname);
     const today = moment().format('YYYY-MM-DD-HHmmss');
     const destination = path.join(serverStorage, today);
 

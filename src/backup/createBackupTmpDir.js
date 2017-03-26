@@ -14,8 +14,8 @@ function createTmpDir(prefix) {
   });
 }
 
-async function createBackupTmpDir(backup, tmpDir = '/tmp') {
-  const backupTmpDir = await createTmpDir(path.join(tmpDir, 'clio-backup.'));
+async function createBackupTmpDir(backup) {
+  const backupTmpDir = await createTmpDir(path.join(backup.config.paths.tmp, 'clio-backup.'));
 
   return u({
     local: {

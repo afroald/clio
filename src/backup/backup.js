@@ -1,6 +1,15 @@
 const { freeze } = require('updeep');
 
 const backup = freeze({
+  config: {
+    gpg: {
+      recipient: null,
+    },
+    paths: {
+      storage: null,
+      tmp: null,
+    },
+  },
   start: null,
   end: null,
   duration: null,
@@ -9,7 +18,6 @@ const backup = freeze({
     files: [],
   },
   local: {
-    storageDir: null,
     files: [],
   },
 });

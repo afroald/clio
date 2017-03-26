@@ -5,7 +5,6 @@ const path = require('path');
 
 const Backupper = require('./Backupper');
 const ConsoleRenderer = require('./renderers/ConsoleRenderer');
-const defaultConfig = require('./config/defaultConfig');
 
 function backupCommand(config, serverName) {
   const renderer = new ConsoleRenderer();
@@ -32,7 +31,7 @@ function cli() {
   ]);
 
   const command = terminal.input[0];
-  const config = require(path.resolve(defaultConfig.paths.config, 'clio.config')); // eslint-disable-line
+  const config = require(path.resolve('/etc/clio', 'clio.config')); // eslint-disable-line
 
   switch (command) {
     case 'backup':

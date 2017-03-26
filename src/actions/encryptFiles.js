@@ -9,7 +9,7 @@ module.exports = u({
   skip: () => backup => !backup.local.files || backup.local.files.length === 0,
   action: () => async function encryptFiles(backup, connection, updater) {
     const filesToEncrypt = backup.local.files;
-    const recipient = process.env.GPG_RECIPIENT;
+    const recipient = backup.config.gpg.recipient;
 
     const actions = filesToEncrypt.map((file) => {
       const filename = path.basename(file);

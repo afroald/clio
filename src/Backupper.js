@@ -28,11 +28,17 @@ class Backupper {
 
     const backupsToRun = serversToBackup.map(server => async () => {
       let backup = createBackup(server, {
-        local: {
-          storageDir: this.config.paths.storage,
+        config: {
+          gpg: {
+            recipient: this.config.gpg.recipient,
+          },
+          paths: {
+            storage: this.config.paths.storage,
+            tmp: this.config.paths.tmp,
+          },
         },
       });
-      backup = await createBackupTmpDir(backup, this.config.paths.tmp);
+      backup = await createBackupTmpDir(backup);
 
       const connection = await this.getConnectionForServer(server);
 

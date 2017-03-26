@@ -4,13 +4,11 @@ const moment = require('moment');
 const path = require('path');
 const u = require('updeep');
 
-const testStorageDir = '/tmp';
-process.env.STORAGE_DIR = testStorageDir;
-
 const archiveFiles = require('../archiveFiles');
+const baseServer = require('../../server');
+const config = require('../../defaultConfig');
 const createActionUpdater = require('../../action/createActionUpdater');
 const createBackup = require('../../backup/createBackup');
-const baseServer = require('../../server');
 
 describe('archiveFiles', () => {
   const server = u({
@@ -25,14 +23,14 @@ describe('archiveFiles', () => {
   let updater;
 
   beforeEach(() => {
-    backup = createBackup(server, {
+    backup = createBackup(server, Object.assign({ config }, {
       local: {
         encryptedFiles: [
           'file1.gpg',
           'file2.gpg',
         ],
       },
-    });
+    }));
 
     connection = {
       execCommand: jest.fn(() => Promise.resolve({ code: 0 })),
@@ -84,7 +82,7 @@ describe('archiveFiles', () => {
       expect(updatedBackup).toEqual(expect.objectContaining({
         local: expect.objectContaining({
           encryptedFiles: ['file1.gpg', 'file2.gpg'],
-          archivedFiles: [path.join(testStorageDir, updatedBackup.server.hostname, moment().format('YYYY-MM-DD-HHmmss'), 'file1.gpg')],
+          archivedFiles: [path.join(config.paths.storage, updatedBackup.server.hostname, moment().format('YYYY-MM-DD-HHmmss'), 'file1.gpg')],
         }),
       }));
     });
