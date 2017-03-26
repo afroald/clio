@@ -21,13 +21,13 @@ module.exports = u({
           return u({
             local: {
               files: files => files.filter(listedFile => listedFile !== file),
-              encryptedFiles: files => files.filter(listedFile => listedFile !== file)
-            }
+              encryptedFiles: files => files.filter(listedFile => listedFile !== file),
+            },
           }, backup);
-        }
+        },
       }, action);
     });
 
     return updater.setSubActions(backup, actions);
-  }
+  },
 }, action);

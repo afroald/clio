@@ -20,13 +20,13 @@ module.exports = u({
 
           return u({
             local: {
-              files: files => [].concat(files, [destinationFile])
-            }
+              files: files => [].concat(files, [destinationFile]),
+            },
           }, backup);
-        }
+        },
       }, action);
     });
 
     return updater.setSubActions(backup, actions);
-  }
+  },
 }, action);

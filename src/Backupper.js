@@ -48,7 +48,7 @@ class Backupper {
         actions: backup.server.actions,
         backup,
         connection,
-        renderer: this.renderer
+        renderer: this.renderer,
       });
 
       connection.dispose();
@@ -56,7 +56,7 @@ class Backupper {
       const end = new Date();
       backup = u({
         end,
-        duration: end.getTime() - backup.start.getTime()
+        duration: end.getTime() - backup.start.getTime(),
       }, backup);
 
       backup = await cleanBackupTmpDir(backup);

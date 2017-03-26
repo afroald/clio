@@ -9,7 +9,7 @@ async function cleanBackupTmpDir(backup) {
   await exec('rm', ['-r', backup.local.tmpDir]);
 
   return u({
-    local: u.omit('tmpDir')
+    local: u.omit('tmpDir'),
   }, backup);
 }
 

@@ -20,8 +20,8 @@ describe('createBackupTmpDir', () => {
     const updatedBackup = await createBackupTmpDir(backup);
     expect(updatedBackup).toEqual(expect.objectContaining({
       local: expect.objectContaining({
-        tmpDir: `${testTmpDir}/clio-backup.test`
-      })
+        tmpDir: `${testTmpDir}/clio-backup.test`,
+      }),
     }));
   });
 });

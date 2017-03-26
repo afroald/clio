@@ -6,7 +6,7 @@ const actions = [
   require('../cleanLocalFiles'),
   require('../cleanRemoteFiles'),
   require('../downloadRemoteFiles'),
-  require('../encryptFiles')
+  require('../encryptFiles'),
 ];
 /* eslint-enable */
 
@@ -14,7 +14,7 @@ const actionStructure = expect.objectContaining({
   title: expect.any(String),
   action: expect.any(Function),
   skip: expect.any(Function),
-  state: null
+  state: null,
 });
 
 actions.forEach((action) => {

@@ -22,13 +22,13 @@ module.exports = u({
 
           return u({
             local: {
-              encryptedFiles: files => [].concat(files || [], [encryptedFile])
-            }
+              encryptedFiles: files => [].concat(files || [], [encryptedFile]),
+            },
           }, backup);
-        }
+        },
       }, action);
     });
 
     return updater.setSubActions(backup, actions);
-  }
+  },
 }, action);

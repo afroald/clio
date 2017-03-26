@@ -21,13 +21,13 @@ module.exports = u({
           return u({
             remote: {
               cleanedFiles: files => [].concat(files || [], remoteFile),
-              files: files => files.filter(file => file !== remoteFile)
-            }
+              files: files => files.filter(file => file !== remoteFile),
+            },
           }, backup);
-        }
+        },
       }, action);
     });
 
     return updater.setSubActions(backup, actions);
-  }
+  },
 }, action);

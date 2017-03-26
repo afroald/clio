@@ -16,8 +16,8 @@ describe('archiveFiles', () => {
   const server = u({
     hostname: 'test.clio',
     actions: [
-      archiveFiles
-    ]
+      archiveFiles,
+    ],
   }, baseServer);
 
   let backup;
@@ -29,13 +29,13 @@ describe('archiveFiles', () => {
       local: {
         encryptedFiles: [
           'file1.gpg',
-          'file2.gpg'
-        ]
-      }
+          'file2.gpg',
+        ],
+      },
     });
 
     connection = {
-      execCommand: jest.fn(() => Promise.resolve({ code: 0 }))
+      execCommand: jest.fn(() => Promise.resolve({ code: 0 })),
     };
 
     updater = createActionUpdater(backup, archiveFiles);
@@ -59,15 +59,15 @@ describe('archiveFiles', () => {
           expect.objectContaining({
             actions: expect.arrayContaining([
               expect.objectContaining({
-                title: expect.stringMatching('file1')
+                title: expect.stringMatching('file1'),
               }),
               expect.objectContaining({
-                title: expect.stringMatching('file2')
-              })
-            ])
-          })
-        ])
-      })
+                title: expect.stringMatching('file2'),
+              }),
+            ]),
+          }),
+        ]),
+      }),
     }));
   });
 
@@ -84,8 +84,8 @@ describe('archiveFiles', () => {
       expect(updatedBackup).toEqual(expect.objectContaining({
         local: expect.objectContaining({
           encryptedFiles: ['file1.gpg', 'file2.gpg'],
-          archivedFiles: [path.join(testStorageDir, updatedBackup.server.hostname, moment().format('YYYY-MM-DD-HHmmss'), 'file1.gpg')]
-        })
+          archivedFiles: [path.join(testStorageDir, updatedBackup.server.hostname, moment().format('YYYY-MM-DD-HHmmss'), 'file1.gpg')],
+        }),
       }));
     });
   });

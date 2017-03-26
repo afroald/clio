@@ -10,8 +10,8 @@ const baseServer = require('../../server');
 describe('encryptFiles', () => {
   const server = u({
     actions: [
-      encryptFiles
-    ]
+      encryptFiles,
+    ],
   }, baseServer);
 
   let backup;
@@ -23,13 +23,13 @@ describe('encryptFiles', () => {
       local: {
         files: [
           'file1',
-          'file2'
-        ]
-      }
+          'file2',
+        ],
+      },
     });
 
     connection = {
-      execCommand: jest.fn(() => Promise.resolve({ code: 0 }))
+      execCommand: jest.fn(() => Promise.resolve({ code: 0 })),
     };
 
     updater = createActionUpdater(backup, encryptFiles);
@@ -53,15 +53,15 @@ describe('encryptFiles', () => {
           expect.objectContaining({
             actions: expect.arrayContaining([
               expect.objectContaining({
-                title: expect.stringMatching('file1')
+                title: expect.stringMatching('file1'),
               }),
               expect.objectContaining({
-                title: expect.stringMatching('file2')
-              })
-            ])
-          })
-        ])
-      })
+                title: expect.stringMatching('file2'),
+              }),
+            ]),
+          }),
+        ]),
+      }),
     }));
   });
 
@@ -78,8 +78,8 @@ describe('encryptFiles', () => {
       expect(updatedBackup).toEqual(expect.objectContaining({
         local: expect.objectContaining({
           files: ['file1', 'file2'],
-          encryptedFiles: ['file1.gpg']
-        })
+          encryptedFiles: ['file1.gpg'],
+        }),
       }));
     });
   });

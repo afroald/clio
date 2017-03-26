@@ -10,8 +10,8 @@ const baseServer = require('../../server');
 describe('cleanLocalFiles', () => {
   const server = u({
     actions: [
-      cleanLocalFiles
-    ]
+      cleanLocalFiles,
+    ],
   }, baseServer);
 
   let backup;
@@ -23,17 +23,17 @@ describe('cleanLocalFiles', () => {
       local: {
         files: [
           'file1',
-          'file2'
+          'file2',
         ],
         encryptedFiles: [
           'file1.gpg',
-          'file2.gpg'
-        ]
-      }
+          'file2.gpg',
+        ],
+      },
     });
 
     connection = {
-      execCommand: jest.fn(() => Promise.resolve({ code: 0 }))
+      execCommand: jest.fn(() => Promise.resolve({ code: 0 })),
     };
 
     updater = createActionUpdater(backup, cleanLocalFiles);
@@ -57,21 +57,21 @@ describe('cleanLocalFiles', () => {
           expect.objectContaining({
             actions: expect.arrayContaining([
               expect.objectContaining({
-                title: expect.stringMatching('file1')
+                title: expect.stringMatching('file1'),
               }),
               expect.objectContaining({
-                title: expect.stringMatching('file2')
+                title: expect.stringMatching('file2'),
               }),
               expect.objectContaining({
-                title: expect.stringMatching('file1.gpg')
+                title: expect.stringMatching('file1.gpg'),
               }),
               expect.objectContaining({
-                title: expect.stringMatching('file2.gpg')
-              })
-            ])
-          })
-        ])
-      })
+                title: expect.stringMatching('file2.gpg'),
+              }),
+            ]),
+          }),
+        ]),
+      }),
     }));
   });
 
@@ -87,8 +87,8 @@ describe('cleanLocalFiles', () => {
       const updatedBackup = await subAction.action(backup, connection);
       expect(updatedBackup).toEqual(expect.objectContaining({
         local: expect.objectContaining({
-          files: ['file2']
-        })
+          files: ['file2'],
+        }),
       }));
     });
   });

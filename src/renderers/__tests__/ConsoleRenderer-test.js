@@ -25,11 +25,11 @@ describe('ConsoleRenderer', () => {
       actions: [
         u({
           title: 'Completed action',
-          state: actionState.COMPLETED
+          state: actionState.COMPLETED,
         }, baseAction),
         u({
           title: 'Pending action',
-          state: actionState.PENDING
+          state: actionState.PENDING,
         }, baseAction),
         u({
           title: 'Pending action with sub-actions',
@@ -37,85 +37,85 @@ describe('ConsoleRenderer', () => {
           actions: [
             u({
               title: 'Completed sub-action 1',
-              state: actionState.COMPLETED
+              state: actionState.COMPLETED,
             }, baseAction),
             u({
               title: 'Completed sub-action 2',
-              state: actionState.COMPLETED
+              state: actionState.COMPLETED,
             }, baseAction),
             u({
               title: 'Failed sub-action',
               state: actionState.FAILED,
-              error: 'Something went wrong'
+              error: 'Something went wrong',
             }, baseAction),
             u({
               title: 'Completed sub-action 3',
-              state: actionState.COMPLETED
+              state: actionState.COMPLETED,
             }, baseAction),
             u({
               title: 'Skipped sub-action',
-              state: actionState.SKIPPED
+              state: actionState.SKIPPED,
             }, baseAction),
             u({
               title: 'Completed sub-action 4',
-              state: actionState.COMPLETED
+              state: actionState.COMPLETED,
             }, baseAction),
             u({
               title: 'Completed sub-action 5',
-              state: actionState.COMPLETED
+              state: actionState.COMPLETED,
             }, baseAction),
             u({
               title: 'Completed sub-action 6',
-              state: actionState.COMPLETED
+              state: actionState.COMPLETED,
             }, baseAction),
             u({
               title: 'Completed sub-action 7',
-              state: actionState.COMPLETED
+              state: actionState.COMPLETED,
             }, baseAction),
             u({
               title: 'Pending sub-action',
-              state: actionState.PENDING
+              state: actionState.PENDING,
             }, baseAction),
             u({
-              title: 'Waiting sub-action 1'
+              title: 'Waiting sub-action 1',
             }, baseAction),
             u({
-              title: 'Waiting sub-action 2'
+              title: 'Waiting sub-action 2',
             }, baseAction),
             u({
-              title: 'Waiting sub-action 3'
+              title: 'Waiting sub-action 3',
             }, baseAction),
             u({
-              title: 'Waiting sub-action 4'
+              title: 'Waiting sub-action 4',
             }, baseAction),
             u({
-              title: 'Waiting sub-action 5'
+              title: 'Waiting sub-action 5',
             }, baseAction),
             u({
-              title: 'Waiting sub-action 6'
+              title: 'Waiting sub-action 6',
             }, baseAction),
             u({
-              title: 'Waiting sub-action 7'
-            }, baseAction)
-          ]
+              title: 'Waiting sub-action 7',
+            }, baseAction),
+          ],
         }, baseAction),
         u({
           title: 'Failed action',
           state: actionState.FAILED,
-          error: 'Something went wrong'
+          error: 'Something went wrong',
         }, baseAction),
         u({
           title: 'Skipped action',
-          state: actionState.SKIPPED
+          state: actionState.SKIPPED,
         }, baseAction),
         u({
-          title: 'Waiting action'
-        }, baseAction)
-      ]
+          title: 'Waiting action',
+        }, baseAction),
+      ],
     };
 
     backup = createBackup(server, {
-      duration: 83000 // 1m 23s in milliseconds
+      duration: 83000, // 1m 23s in milliseconds
     });
 
     renderer.render(backup);

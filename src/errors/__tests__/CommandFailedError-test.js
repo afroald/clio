@@ -11,7 +11,7 @@ describe('CommandFailedError', () => {
   it('should set a message', () => {
     const error = new CommandFailedError();
     expect(error).toEqual(expect.objectContaining({
-      message: expect.stringMatching(/Command .* failed .*/)
+      message: expect.stringMatching(/Command .* failed .*/),
     }));
   });
 

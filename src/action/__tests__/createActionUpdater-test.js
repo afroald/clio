@@ -17,13 +17,13 @@ describe('createActionUpdater', () => {
   beforeEach(() => {
     action = u({
       title: 'Test action',
-      action: () => () => {}
+      action: () => () => {},
     }, baseAction);
 
     server = u({
       actions: [
-        action
-      ]
+        action,
+      ],
     }, baseServer);
 
     backup = createBackup(server);
@@ -34,7 +34,7 @@ describe('createActionUpdater', () => {
     it('should set actions on the specified action', () => {
       const actions = [
         'action1',
-        'action2'
+        'action2',
       ];
 
       const updatedBackup = updater.setSubActions(backup, actions);
@@ -43,10 +43,10 @@ describe('createActionUpdater', () => {
         server: expect.objectContaining({
           actions: expect.arrayContaining([
             expect.objectContaining({
-              actions: expect.arrayContaining(actions)
-            })
-          ])
-        })
+              actions: expect.arrayContaining(actions),
+            }),
+          ]),
+        }),
       }));
     });
   });
@@ -59,10 +59,10 @@ describe('createActionUpdater', () => {
         server: expect.objectContaining({
           actions: expect.arrayContaining([
             expect.objectContaining({
-              state: state.SKIPPED
-            })
-          ])
-        })
+              state: state.SKIPPED,
+            }),
+          ]),
+        }),
       }));
     });
 
@@ -73,10 +73,10 @@ describe('createActionUpdater', () => {
         server: expect.objectContaining({
           actions: expect.arrayContaining([
             expect.objectContaining({
-              state: state.SKIPPED
-            })
-          ])
-        })
+              state: state.SKIPPED,
+            }),
+          ]),
+        }),
       }));
 
       updatedBackup = updater.setState(updatedBackup, state.COMPLETED);
@@ -85,31 +85,31 @@ describe('createActionUpdater', () => {
         server: expect.objectContaining({
           actions: expect.arrayContaining([
             expect.objectContaining({
-              state: state.COMPLETED
-            })
-          ])
-        })
+              state: state.COMPLETED,
+            }),
+          ]),
+        }),
       }));
     });
 
     it('should be able to update a sub-action', () => {
       const subAction = u({
         title: 'Test sub-action',
-        action: () => () => {}
+        action: () => () => {},
       }, baseAction);
 
       action = u({
         title: 'Test action',
         action: () => () => {},
         actions: [
-          subAction
-        ]
+          subAction,
+        ],
       }, baseAction);
 
       server = u({
         actions: [
-          action
-        ]
+          action,
+        ],
       }, baseServer);
 
       backup = createBackup(server);
@@ -122,12 +122,12 @@ describe('createActionUpdater', () => {
             expect.objectContaining({
               actions: expect.arrayContaining([
                 expect.objectContaining({
-                  state: state.PENDING
-                })
-              ])
-            })
-          ])
-        })
+                  state: state.PENDING,
+                }),
+              ]),
+            }),
+          ]),
+        }),
       }));
     });
   });
@@ -140,10 +140,10 @@ describe('createActionUpdater', () => {
         server: expect.objectContaining({
           actions: expect.arrayContaining([
             expect.objectContaining({
-              state: state.PENDING
-            })
-          ])
-        })
+              state: state.PENDING,
+            }),
+          ]),
+        }),
       }));
     });
   });
@@ -174,10 +174,10 @@ describe('createActionUpdater', () => {
         server: expect.objectContaining({
           actions: expect.arrayContaining([
             expect.objectContaining({
-              state: state.FAILED
-            })
-          ])
-        })
+              state: state.FAILED,
+            }),
+          ]),
+        }),
       }));
     });
 
@@ -188,10 +188,10 @@ describe('createActionUpdater', () => {
         server: expect.objectContaining({
           actions: expect.arrayContaining([
             expect.objectContaining({
-              error
-            })
-          ])
-        })
+              error,
+            }),
+          ]),
+        }),
       }));
     });
   });
@@ -206,10 +206,10 @@ describe('createActionUpdater', () => {
         server: expect.objectContaining({
           actions: expect.arrayContaining([
             expect.objectContaining({
-              state: state.SKIPPED
-            })
-          ])
-        })
+              state: state.SKIPPED,
+            }),
+          ]),
+        }),
       }));
     });
 
@@ -220,10 +220,10 @@ describe('createActionUpdater', () => {
         server: expect.objectContaining({
           actions: expect.arrayContaining([
             expect.objectContaining({
-              reason
-            })
-          ])
-        })
+              reason,
+            }),
+          ]),
+        }),
       }));
     });
   });

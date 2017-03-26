@@ -10,8 +10,8 @@ const baseServer = require('../../server');
 describe('cleanRemoteFiles', () => {
   const server = u({
     actions: [
-      cleanRemoteFiles
-    ]
+      cleanRemoteFiles,
+    ],
   }, baseServer);
 
   let backup;
@@ -23,13 +23,13 @@ describe('cleanRemoteFiles', () => {
       remote: {
         files: [
           'file1',
-          'file2'
-        ]
-      }
+          'file2',
+        ],
+      },
     });
 
     connection = {
-      execCommand: jest.fn(() => Promise.resolve({ code: 0 }))
+      execCommand: jest.fn(() => Promise.resolve({ code: 0 })),
     };
 
     updater = createActionUpdater(backup, cleanRemoteFiles);
@@ -53,15 +53,15 @@ describe('cleanRemoteFiles', () => {
           expect.objectContaining({
             actions: expect.arrayContaining([
               expect.objectContaining({
-                title: expect.stringMatching('file1')
+                title: expect.stringMatching('file1'),
               }),
               expect.objectContaining({
-                title: expect.stringMatching('file2')
-              })
-            ])
-          })
-        ])
-      })
+                title: expect.stringMatching('file2'),
+              }),
+            ]),
+          }),
+        ]),
+      }),
     }));
   });
 
@@ -83,14 +83,14 @@ describe('cleanRemoteFiles', () => {
       expect(updatedBackup).toEqual(expect.objectContaining({
         remote: expect.objectContaining({
           cleanedFiles: ['file1'],
-          files: ['file2']
-        })
+          files: ['file2'],
+        }),
       }));
     });
 
     it('should reject when ssh connection fails', async () => {
       connection = {
-        execCommand: jest.fn(() => Promise.reject(new Error()))
+        execCommand: jest.fn(() => Promise.reject(new Error())),
       };
 
       let thrownError = null;
@@ -107,7 +107,7 @@ describe('cleanRemoteFiles', () => {
 
     it('should reject when command fails', async () => {
       connection = {
-        execCommand: jest.fn(() => Promise.resolve({ code: 1 }))
+        execCommand: jest.fn(() => Promise.resolve({ code: 1 })),
       };
 
       let thrownError = null;

@@ -3,9 +3,9 @@ const { freeze } = require('updeep');
 const server = freeze({
   hostname: '',
   config: {
-    tmpDir: '/tmp/running-backup'
+    tmpDir: '/tmp/running-backup',
   },
-  actions: []
+  actions: [],
 });
 
 module.exports = server;

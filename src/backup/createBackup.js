@@ -5,7 +5,7 @@ const backup = require('./backup');
 function createBackup(server, options = {}) {
   return u(u({
     start: new Date(),
-    server
+    server,
   }, options), backup);
 }
 

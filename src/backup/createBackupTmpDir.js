@@ -20,8 +20,8 @@ async function createBackupTmpDir(backup) {
 
   return u({
     local: {
-      tmpDir: backupTmpDir
-    }
+      tmpDir: backupTmpDir,
+    },
   }, backup);
 }
 

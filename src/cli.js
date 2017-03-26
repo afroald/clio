@@ -3,7 +3,7 @@ const meow = require('meow');
 const path = require('path');
 
 dotenv.config({
-  path: path.join(__dirname, '../.env')
+  path: path.join(__dirname, '../.env'),
 });
 
 const Backupper = require('./Backupper');
@@ -12,7 +12,7 @@ const ConsoleRenderer = require('./renderers/ConsoleRenderer');
 function cli() {
   const terminal = meow([
     'Usage',
-    '  clio [server]'
+    '  clio [server]',
   ]);
 
   const serverName = terminal.input[0];

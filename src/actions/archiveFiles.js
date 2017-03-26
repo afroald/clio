@@ -40,13 +40,13 @@ module.exports = u({
 
           return u({
             local: {
-              archivedFiles: files => [].concat(files || [], [fileDestination])
-            }
+              archivedFiles: files => [].concat(files || [], [fileDestination]),
+            },
           }, backup);
-        }
+        },
       }, action);
     });
 
     return updater.setSubActions(backup, actions);
-  }
+  },
 }, action);

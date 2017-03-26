@@ -14,8 +14,8 @@ describe('cleanBackupTmpDir', () => {
   beforeEach(() => {
     backup = createBackup(server, {
       local: {
-        tmpDir: '/tmp/clio-test/clio-backup.test'
-      }
+        tmpDir: '/tmp/clio-test/clio-backup.test',
+      },
     });
   });
 
@@ -37,8 +37,8 @@ describe('cleanBackupTmpDir', () => {
     const updatedBackup = await cleanBackupTmpDir(backup);
     expect(updatedBackup).not.toEqual(expect.objectContaining({
       local: expect.objectContaining({
-        tmpDir: expect.any(String)
-      })
+        tmpDir: expect.any(String),
+      }),
     }));
   });
 });

@@ -41,7 +41,7 @@ async function runActions({ actions, backup, connection, renderer }) {
           }, Promise.resolve(backup));
 
           const failedSubActions = backup.server.actions[index].actions.filter(
-            subAction => subAction.state === state.FAILED
+            subAction => subAction.state === state.FAILED,
           );
 
           if (failedSubActions.length > 0) {

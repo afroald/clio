@@ -8,7 +8,7 @@ describe('createBackup', () => {
     const backup = createBackup(server);
 
     expect(backup).toEqual(expect.objectContaining({
-      server: expect.any(Object)
+      server: expect.any(Object),
     }));
   });
 
@@ -16,7 +16,7 @@ describe('createBackup', () => {
     const backup = createBackup(server, { foo: 'bar' });
 
     expect(backup).toEqual(expect.objectContaining({
-      foo: 'bar'
+      foo: 'bar',
     }));
   });
 

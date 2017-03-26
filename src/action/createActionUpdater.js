@@ -28,11 +28,11 @@ function createUpdater(backup, action, subAction) {
           actions: {
             [index]: {
               actions: {
-                [subIndex]: update
-              }
-            }
-          }
-        }
+                [subIndex]: update,
+              },
+            },
+          },
+        },
       };
     };
   } else {
@@ -40,9 +40,9 @@ function createUpdater(backup, action, subAction) {
       return {
         server: {
           actions: {
-            [index]: update
-          }
-        }
+            [index]: update,
+          },
+        },
       };
     };
   }
@@ -56,7 +56,7 @@ function createActionUpdater(originalBackup, action, subAction) {
   return {
     setSubActions(backup, subActions) {
       return u(createUpdate({
-        actions: subActions
+        actions: subActions,
       }), backup);
     },
 
@@ -75,16 +75,16 @@ function createActionUpdater(originalBackup, action, subAction) {
     failed(backup, error) {
       return u(createUpdate({
         state: state.FAILED,
-        error
+        error,
       }), backup);
     },
 
     skipped(backup, reason = '') {
       return u(createUpdate({
         state: state.SKIPPED,
-        reason
+        reason,
       }), backup);
-    }
+    },
   };
 }
 

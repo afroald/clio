@@ -6,12 +6,12 @@ const backup = freeze({
   duration: null,
   server: null,
   remote: {
-    files: []
+    files: [],
   },
   local: {
     storageDir: process.env.STORAGE_DIR,
-    files: []
-  }
+    files: [],
+  },
 });
 
 module.exports = backup;

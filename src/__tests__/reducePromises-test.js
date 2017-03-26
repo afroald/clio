@@ -6,7 +6,7 @@ describe('reducePromises', () => {
   const tasks = [
     async () => 'value1',
     async () => 'value2',
-    async () => 'value3'
+    async () => 'value3',
   ];
 
   it('should return a promise', () => {
@@ -21,7 +21,7 @@ describe('reducePromises', () => {
     expect(values).toEqual(expect.arrayContaining([
       'value1',
       'value2',
-      'value3'
+      'value3',
     ]));
   });
 
@@ -31,7 +31,7 @@ describe('reducePromises', () => {
       async () => {
         throw new Error('task failed');
       },
-      async () => 'value3'
+      async () => 'value3',
     ];
 
     let errorThrown = false;
