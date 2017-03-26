@@ -1,6 +1,6 @@
 {
   "name": "clio",
-  "version": "0.1.0",
+  "version": "0.0.0",
   "description": "A system for creating and archiving backups of remote machines",
   "author": "Roald Hacquebord <roald@hacquebordbuckles.nl>",
   "bin": {
