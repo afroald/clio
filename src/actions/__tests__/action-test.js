@@ -5,8 +5,6 @@ const actions = [
   require('../archiveFiles'),
   require('../cleanLocalFiles'),
   require('../cleanRemoteFiles'),
-  require('../createGitlabBackup'),
-  require('../createVirtualminBackup'),
   require('../downloadRemoteFiles'),
   require('../encryptFiles')
 ];
