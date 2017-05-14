@@ -24,7 +24,11 @@ container if changes are wanted. This is enforced by using [Updeep](https://www.
 - Less classical inheritance ([Classical Inheritance is Obsolete](https://vimeo.com/69255635))
 
 ## To do
+- `backup` should be a state store with defined mutations, instead of just an immutable object
+- The cli should be a separate package
+
 - Verbose renderer
 - Add Slack notifications
 - Make project easier to start using
 - Possibility to configure how many backups to keep
+- Move files instead of copying then when archiving
