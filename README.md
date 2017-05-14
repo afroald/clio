@@ -25,10 +25,13 @@ container if changes are wanted. This is enforced by using [Updeep](https://www.
 
 ## To do
 - `backup` should be a state store with defined mutations, instead of just an immutable object
-- The cli should be a separate package
+- The cli should be a separate package?
 
 - Verbose renderer
 - Add Slack notifications
 - Make project easier to start using
 - Possibility to configure how many backups to keep
 - Move files instead of copying then when archiving
+- Refactor server concept into more generic device?
+- Rename actions to tasks?
+- Replace custom store with vuex?
