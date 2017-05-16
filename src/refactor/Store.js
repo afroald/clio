@@ -1,11 +1,14 @@
 const { freeze } = require('updeep');
 const MutationNotFoundError = require('./errors/MutationNotFoundError');
 
-function Store({ state = {}, mutations = {} } = {}) {
-  this.state = freeze(state);
+class Store {
+  constructor({ state = {}, mutations = {} } = {}) {
+    this.state = freeze(state);
+    this.mutations = mutations;
+  }
 
-  this.commit = function commit(mutationId, payload) {
-    const mutation = mutations[mutationId];
+  commit(mutationId, payload) {
+    const mutation = this.mutations[mutationId];
 
     if (!mutation) {
       throw new MutationNotFoundError(`Mutation with id ${mutationId} not found.`);
@@ -14,7 +17,15 @@ function Store({ state = {}, mutations = {} } = {}) {
     const newState = Object.assign({}, this.state);
     mutation(newState, payload);
     this.state = freeze(newState);
-  };
+  }
+
+  get state() {
+    return this.state;
+  }
+
+  set state(value) {
+    throw new Error('Writing to state directly is not allowed.');
+  }
 }
 
 module.exports = Store;
