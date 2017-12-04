@@ -9,6 +9,10 @@ describe('MutationNotFoundError', () => {
     error = new MutationNotFoundError();
   });
 
+  it('should be an instance of MutationNotFoundError', () => {
+    expect(error).toBeInstanceOf(MutationNotFoundError);
+  });
+
   it('should be an instance of Error', () => {
     expect(error).toBeInstanceOf(Error);
   });

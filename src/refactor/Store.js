@@ -18,14 +18,6 @@ class Store {
     mutation(newState, payload);
     this.state = freeze(newState);
   }
-
-  get state() {
-    return this.state;
-  }
-
-  set state(value) {
-    throw new Error('Writing to state directly is not allowed.');
-  }
 }
 
 module.exports = Store;
