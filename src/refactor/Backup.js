@@ -1,13 +1,9 @@
 const { freeze } = require('updeep');
+const states = require('./backupStates');
+const mutations = require('./mutations');
 const Store = require('./Store');
 
-const states = freeze({
-  NEW: Symbol('new'),
-  RUNNING: Symbol('running'),
-  FINISHED: Symbol('finished'),
-});
-
-const defaultState = {
+const defaultState = freeze({
   config: {
     gpg: {
       recipient: null,
@@ -28,15 +24,36 @@ const defaultState = {
   local: {
     files: [],
   },
-};
+});
 
-class Backup extends Store {
-  constructor(config = {}) {
-    super(Object.assign({}, config, { state: defaultState }));
-  }
+function Backup({ server, config }) {
+  const state = new Store({
+    state: {
+      ...defaultState,
+      ...config,
+      server,
+    },
+    mutations,
+  });
+
+  this.run = async function run() {
+    state.commit('start');
+    // console.log(state);
+  };
+
+  Object.defineProperties(this, {
+    start: {
+      get() {
+        return state.start;
+      },
+    },
+    state: {
+      get() {
+        return state.state;
+      },
+    },
+  });
 }
-
-Backup.states = states;
 
 module.exports = Backup;
 

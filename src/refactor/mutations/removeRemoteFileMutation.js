@@ -1,7 +1,7 @@
 const removeFileMutation = require('./removeFileMutation');
 
-function removeLocalFileMutation(backup, payload) {
-  return removeFileMutation(backup, 'remote', payload);
+function removeLocalFileMutation(state, payload) {
+  return removeFileMutation(state, 'remote', payload);
 }
 
 module.exports = removeLocalFileMutation;

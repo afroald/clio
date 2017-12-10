@@ -1,18 +1,18 @@
 /* eslint-env node, jest */
 
-const { states: backupStates } = require('../../Backup');
+const states = require('../../backupStates');
 const startMutation = require('../startMutation');
 
 describe('startMutation', () => {
   it('should set the start date to now', () => {
-    const backup = {
-      state: backupStates.NEW,
+    const state = {
+      state: null,
       start: null,
     };
 
-    startMutation(backup);
+    startMutation(state);
 
-    expect(backup.state).toEqual(backupStates.RUNNING);
-    expect(backup.start).toBeInstanceOf(Date);
+    expect(state.state).toEqual(states.RUNNING);
+    expect(state.start).toBeInstanceOf(Date);
   });
 });

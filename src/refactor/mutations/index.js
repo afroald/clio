@@ -1,8 +1,14 @@
+/* eslint-disable global-require */
+
 const { freeze } = require('updeep');
-const start = require('./startMutation');
-const end = require('./endMutation');
+
+const startMutation = require('./startMutation');
 
 module.exports = freeze({
-  start,
-  end,
+  start: startMutation,
+  end: require('./endMutation'),
+  addLocalFile: require('./addLocalFileMutation'),
+  removeLocalFile: require('./removeLocalFileMutation'),
+  addRemoteFile: require('./addRemoteFileMutation'),
+  removeRemoteFile: require('./removeRemoteFileMutation'),
 });

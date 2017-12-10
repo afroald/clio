@@ -1,7 +1,7 @@
 const addFileMutation = require('./addFileMutation');
 
-function addLocalFileMutation(backup, payload) {
-  return addFileMutation(backup, 'local', payload);
+function addLocalFileMutation(state, payload) {
+  return addFileMutation(state, 'local', payload);
 }
 
 module.exports = addLocalFileMutation;

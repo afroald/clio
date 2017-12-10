@@ -1,10 +1,10 @@
 /* eslint-disable no-param-reassign */
 
-const { states: backupStates } = require('../Backup');
+const states = require('../backupStates');
 
-function endMutation(backup) {
-  backup.end = new Date();
-  backup.state = backupStates.FINISHED;
+function endMutation(state) {
+  state.end = new Date();
+  state.state = states.FINISHED;
 }
 
 module.exports = endMutation;
