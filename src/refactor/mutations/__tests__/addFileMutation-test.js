@@ -1,9 +1,9 @@
 /* eslint-env node, jest */
 
-const addLocalFileMutation = require('../addLocalFileMutation');
+const addFileMutation = require('../addFileMutation');
 const File = require('../../File');
 
-describe('addLocalFileMutation', () => {
+describe('addFileMutation', () => {
   let backup = null;
 
   beforeEach(() => {
@@ -16,14 +16,14 @@ describe('addLocalFileMutation', () => {
 
   it('should add a file', () => {
     const file = new File('test-path');
-    addLocalFileMutation(backup, { file });
+    addFileMutation(backup, 'local', { file });
     expect(backup.local.files).toEqual(expect.arrayContaining([file]));
   });
 
   it('should throw an error when file is not an instance of File', () => {
     const file = 'test';
     expect(() => {
-      addLocalFileMutation(backup, { file });
+      addFileMutation(backup, 'local', { file });
     }).toThrow(Error);
   });
 });
