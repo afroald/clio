@@ -31,6 +31,16 @@ function Store({ state: initialState = {}, mutations = {} } = {}) {
   });
 
   pushState(initialState);
+
+  return new Proxy(this, {
+    get(target, property) {
+      if (!target[property]) {
+        return target.state[property];
+      }
+
+      return target[property];
+    },
+  });
 }
 
 module.exports = Store;

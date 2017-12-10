@@ -1,6 +1,7 @@
 const { freeze } = require('updeep');
-const states = require('./backupStates');
+const defaultConfig = require('../defaultConfig');
 const mutations = require('./mutations');
+const states = require('./backupStates');
 const Store = require('./Store');
 
 const defaultState = freeze({
@@ -26,11 +27,14 @@ const defaultState = freeze({
   },
 });
 
-function Backup({ server, config }) {
+function Backup({ server = {}, config = {} } = {}) {
   const state = new Store({
     state: {
       ...defaultState,
-      ...config,
+      config: {
+        ...defaultConfig,
+        ...config,
+      },
       server,
     },
     mutations,
@@ -38,10 +42,14 @@ function Backup({ server, config }) {
 
   this.run = async function run() {
     state.commit('start');
-    // console.log(state);
   };
 
   Object.defineProperties(this, {
+    duration: {
+      get() {
+        return state.end.getTime() - state.start.getTime();
+      },
+    },
     start: {
       get() {
         return state.start;

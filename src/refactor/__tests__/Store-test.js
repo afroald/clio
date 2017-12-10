@@ -47,4 +47,14 @@ describe('Store', () => {
 
     expect(store.state.count).toBe(1);
   });
+
+  it('should pass property lookups', () => {
+    const store = new Store({
+      state: {
+        foo: 'bar',
+      },
+    });
+
+    expect(store.foo).toEqual('bar');
+  });
 });
