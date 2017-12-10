@@ -38,7 +38,7 @@ describe('Store', () => {
       },
       mutations: {
         increment: function increment(state) {
-          state.count += 1;
+          state.count += 1; // eslint-disable-line no-param-reassign
         },
       },
     });

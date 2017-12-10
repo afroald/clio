@@ -1,23 +1,36 @@
 const { freeze } = require('updeep');
 const MutationNotFoundError = require('./errors/MutationNotFoundError');
 
-class Store {
-  constructor({ state = {}, mutations = {} } = {}) {
-    this.state = freeze(state);
-    this.mutations = mutations;
+function Store({ state: initialState = {}, mutations = {} } = {}) {
+  const states = [];
+
+  function pushState(state) {
+    states.push(freeze(state));
   }
 
-  commit(mutationId, payload) {
-    const mutation = this.mutations[mutationId];
+  Object.defineProperties(this, {
+    commit: {
+      value: function commit(mutationId, payload = {}) {
+        const mutation = mutations[mutationId];
 
-    if (!mutation) {
-      throw new MutationNotFoundError(`Mutation with id ${mutationId} not found.`);
-    }
+        if (!mutation) {
+          throw new MutationNotFoundError(`Mutation with id ${mutationId} not found.`);
+        }
 
-    const newState = Object.assign({}, this.state);
-    mutation(newState, payload);
-    this.state = freeze(newState);
-  }
+        const newState = Object.assign({}, this.state);
+        mutation(newState, payload);
+        pushState(newState);
+      },
+    },
+
+    state: {
+      get() {
+        return states[states.length - 1];
+      },
+    },
+  });
+
+  pushState(initialState);
 }
 
 module.exports = Store;
