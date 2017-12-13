@@ -9,6 +9,11 @@ const writeFile = promisify(fs.writeFile);
 const unlink = promisify(fs.unlink);
 
 function FileStorage(root) {
+  Object.defineProperty(this, 'root', {
+    writable: false,
+    value: root,
+  });
+
   this.read = function read(filePath) {
     return readFile(path.resolve(root, filePath));
   };

@@ -15,8 +15,18 @@ const testFile = path.resolve(__dirname, 'test.tmp');
 describe('FileStorage', () => {
   let storage;
 
+  async function deleteTestFile() {
+    try {
+      await storage.delete(testFile);
+    } catch (error) {} // eslint-disable-line no-empty
+  }
+
   beforeEach(() => {
     storage = new FileStorage(path.resolve(__dirname));
+  });
+
+  afterEach(async () => {
+    await deleteTestFile();
   });
 
   it('is an instance of Storage', () => {
@@ -31,8 +41,6 @@ describe('FileStorage', () => {
     expect(() => {
       fs.statSync(path.resolve(__dirname, testFile));
     }).not.toThrow();
-
-    await storage.delete(testFile);
   });
 
   it('reads files', async () => {
@@ -40,8 +48,6 @@ describe('FileStorage', () => {
 
     const data = await storage.read(testFile);
     expect(data.toString()).toEqual(lipsum);
-
-    await storage.delete(testFile);
   });
 
   it('provides a read stream', async () => {
@@ -51,8 +57,6 @@ describe('FileStorage', () => {
     expect(stream).toBeInstanceOf(Readable);
     const data = Buffer.concat(await streamToArray(stream));
     expect(data.toString()).toEqual(lipsum);
-
-    await storage.delete(testFile);
   });
 
   it('provides a write stream', (done) => {
@@ -68,7 +72,7 @@ describe('FileStorage', () => {
     readStream.on('end', () => {
       storage.read(testFile).then((data) => {
         expect(data.toString()).toEqual(lipsum);
-        storage.delete(testFile).then(done);
+        done();
       });
     });
 
@@ -88,5 +92,30 @@ describe('FileStorage', () => {
     expect(() => {
       fs.statSync(path.resolve(__dirname, testFile));
     }).toThrow();
+  });
+
+  it("won't overwrite files", async () => {
+    expect.assertions(2);
+
+    await storage.write(testFile, lipsum);
+
+    try {
+      await storage.write(testFile, lipsum);
+    } catch (error) {
+      expect(error).toEqual(expect.objectContaining({
+        code: 'EEXIST',
+      }));
+    }
+
+    try {
+      await (() => new Promise((resolve, reject) => {
+        const stream = storage.writeStream(testFile);
+        stream.on('error', reject);
+      }))();
+    } catch (error) {
+      expect(error).toEqual(expect.objectContaining({
+        code: 'EEXIST',
+      }));
+    }
   });
 });
