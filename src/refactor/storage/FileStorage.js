@@ -14,22 +14,43 @@ function FileStorage(root) {
     value: root,
   });
 
+  /**
+   * @param {String} filePath
+   * @returns {Promise<Buffer>}
+   */
   this.read = function read(filePath) {
     return readFile(path.resolve(root, filePath));
   };
 
+  /**
+   * @param {String} filePath
+   * @returns {stream.Readable}
+   */
   this.readStream = function readStream(filePath) {
     return fs.createReadStream(path.resolve(root, filePath));
   };
 
+  /**
+   * @param {String} filePath
+   * @param {Buffer} data
+   * @returns {Promise}
+   */
   this.write = function write(filePath, data) {
     return writeFile(path.resolve(root, filePath), data, { flag: 'wx' });
   };
 
+  /**
+   * @param {String} filePath
+   * @returns {stream.Writable}
+   */
   this.writeStream = function writeStream(filePath) {
     return fs.createWriteStream(filePath, { flags: 'wx' });
   };
 
+  /**
+   * @param {String} filePath
+   * @returns {Promise}
+   */
   this.delete = function deleteFile(filePath) {
     return unlink(path.resolve(root, filePath));
   };
