@@ -46,11 +46,6 @@ function Backup({ server = {}, config = {} } = {}) {
   };
 
   Object.defineProperties(this, {
-    duration: {
-      get() {
-        return state.end.getTime() - state.start.getTime();
-      },
-    },
     start: {
       get() {
         return state.start;
