@@ -1,4 +1,5 @@
 const { freeze } = require('updeep');
+const os = require('os');
 const defaultConfig = require('../defaultConfig');
 const mutations = require('./mutations');
 const states = require('./backupStates');
@@ -11,7 +12,7 @@ const defaultState = freeze({
     },
     paths: {
       storage: null,
-      tmp: null,
+      tmp: os.tmpdir(),
     },
   },
   state: states.NEW,
