@@ -7,6 +7,7 @@ describe('endMutation', () => {
   it('should set the end date to now', () => {
     const backup = {
       state: states.NEW,
+      start: new Date(),
       end: null,
     };
 
