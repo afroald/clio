@@ -12,7 +12,7 @@ class Storage {
 
   /**
    * @param {String} filePath
-   * @returns {stream.Readable}
+   * @returns {Promise<stream.Readable>}
    */
   createReadStream() {
     throw new NotImplementedError();
@@ -29,7 +29,7 @@ class Storage {
 
   /**
    * @param {String} filePath
-   * @returns {stream.Writable}
+   * @returns {Promise<stream.Writable>}
    */
   createWriteStream() {
     throw new NotImplementedError();
