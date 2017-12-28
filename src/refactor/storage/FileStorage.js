@@ -26,7 +26,7 @@ function FileStorage(root) {
    * @param {String} filePath
    * @returns {stream.Readable}
    */
-  this.readStream = function readStream(filePath) {
+  this.createReadStream = function createReadStream(filePath) {
     return fs.createReadStream(path.resolve(root, filePath));
   };
 
@@ -43,7 +43,7 @@ function FileStorage(root) {
    * @param {String} filePath
    * @returns {stream.Writable}
    */
-  this.writeStream = function writeStream(filePath) {
+  this.createWriteStream = function createWriteStream(filePath) {
     return fs.createWriteStream(filePath, { flags: 'wx' });
   };
 

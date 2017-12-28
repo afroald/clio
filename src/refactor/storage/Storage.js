@@ -14,7 +14,7 @@ class Storage {
    * @param {String} filePath
    * @returns {stream.Readable}
    */
-  readStream() {
+  createReadStream() {
     throw new NotImplementedError();
   }
 
@@ -31,7 +31,7 @@ class Storage {
    * @param {String} filePath
    * @returns {stream.Writable}
    */
-  writeStream() {
+  createWriteStream() {
     throw new NotImplementedError();
   }
 

@@ -53,7 +53,7 @@ describe('FileStorage', () => {
   it('provides a read stream', async () => {
     await storage.write(testFile, lipsum);
 
-    const stream = storage.readStream(testFile);
+    const stream = storage.createReadStream(testFile);
     expect(stream).toBeInstanceOf(Readable);
     const data = Buffer.concat(await streamToArray(stream));
     expect(data.toString()).toEqual(lipsum);
@@ -64,7 +64,7 @@ describe('FileStorage', () => {
 
     const buffer = Buffer.from(lipsum, 'utf-8');
     const readStream = new ReadableStreamBuffer();
-    const writeStream = storage.writeStream(testFile);
+    const writeStream = storage.createWriteStream(testFile);
     expect(writeStream).toBeInstanceOf(Writable);
 
     readStream.pipe(writeStream);
@@ -109,7 +109,7 @@ describe('FileStorage', () => {
 
     try {
       await (() => new Promise((resolve, reject) => {
-        const stream = storage.writeStream(testFile);
+        const stream = storage.createWriteStream(testFile);
         stream.on('error', reject);
       }))();
     } catch (error) {
