@@ -37,6 +37,8 @@
     "ora": "^1.1.0",
     "pretty-ms": "^2.1.0",
     "rimraf": "^2.6.2",
+    "stream-buffers": "^3.0.1",
+    "stream-to-array": "^2.3.0",
     "updeep": "^1.0.0"
   },
   "devDependencies": {
@@ -47,9 +49,7 @@
     "eslint-plugin-import": "^2.2.0",
     "eslint-plugin-jsx-a11y": "^5.0.1",
     "eslint-plugin-react": "^7.0.1",
-    "jest": "^21.0.0",
-    "stream-buffers": "^3.0.1",
-    "stream-to-array": "^2.3.0"
+    "jest": "^21.0.0"
   },
   "preferGlobal": true,
   "license": "MIT",
