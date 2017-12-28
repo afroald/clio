@@ -1,6 +1,8 @@
 const { freeze } = require('updeep');
+const merge = require('deepmerge');
+const path = require('path');
 const os = require('os');
-const defaultConfig = require('../defaultConfig');
+
 const mutations = require('./mutations');
 const states = require('./backupStates');
 const Store = require('./Store');
@@ -11,7 +13,7 @@ const defaultState = freeze({
       recipient: null,
     },
     paths: {
-      storage: null,
+      config: path.resolve('/etc/clio'),
       tmp: os.tmpdir(),
     },
   },
@@ -29,31 +31,29 @@ const defaultState = freeze({
 });
 
 function Backup({ server = {}, config = {} } = {}) {
-  const state = new Store({
-    state: {
-      ...defaultState,
-      config: {
-        ...defaultConfig,
-        ...config,
-      },
-      server,
-    },
+  const store = new Store({
+    state: merge.all([
+      defaultState,
+      { config },
+      { server },
+    ]),
     mutations,
   });
 
   this.run = async function run() {
-    state.commit('start');
+    store.commit('start');
+    console.log(this.state);
   };
 
   Object.defineProperties(this, {
     start: {
       get() {
-        return state.start;
+        return store.start;
       },
     },
     state: {
       get() {
-        return state.state;
+        return store.state;
       },
     },
   });
