@@ -1,5 +1,6 @@
 const { diff } = require('deep-object-diff');
 const { freeze } = require('updeep');
+const merge = require('deepmerge');
 const EventEmitter = require('events');
 const MutationNotFoundError = require('./errors/MutationNotFoundError');
 
@@ -26,7 +27,7 @@ function Store({ state: initialState = {}, mutations = {} } = {}) {
           throw new MutationNotFoundError(`Mutation with id ${mutationId} not found.`);
         }
 
-        const newState = { ...this.state };
+        const newState = merge({}, this.state);
         mutation(newState, payload);
 
         pushState(newState);

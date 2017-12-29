@@ -11,4 +11,5 @@ module.exports = freeze({
   removeLocalFile: require('./removeLocalFileMutation'),
   addRemoteFile: require('./addRemoteFileMutation'),
   removeRemoteFile: require('./removeRemoteFileMutation'),
+  updateActionState: require('./updateActionStateMutation'),
 });

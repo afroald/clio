@@ -1,48 +1,40 @@
-const { freeze } = require('updeep');
-const merge = require('deepmerge');
-const path = require('path');
-const os = require('os');
+const EventEmitter = require('events');
 
+const actionStates = require('./action/actionStates');
+const initializeState = require('./initializeState');
 const mutations = require('./mutations');
-const states = require('./backupStates');
 const Store = require('./Store');
 
-const defaultState = freeze({
-  config: {
-    gpg: {
-      recipient: null,
-    },
-    paths: {
-      config: path.resolve('/etc/clio'),
-      tmp: os.tmpdir(),
-    },
-  },
-  state: states.NEW,
-  start: null,
-  end: null,
-  duration: null,
-  server: null,
-  remote: {
-    files: [],
-  },
-  local: {
-    files: [],
-  },
-});
-
 function Backup({ server = {}, config = {} } = {}) {
+  EventEmitter.call(this);
+
   const store = new Store({
-    state: merge.all([
-      defaultState,
-      { config },
-      { server },
-    ]),
+    state: initializeState({ config, server }),
     mutations,
   });
 
+  store.on('commit', (...args) => this.emit('commit', ...args));
+
   this.run = async function run() {
     store.commit('start');
-    console.log(this.state);
+
+    await Promise.all(store.state.actions.map(async (action) => {
+      store.commit('updateActionState', { action, state: actionStates.RUNNING });
+
+      if (await action.skip(store.state)) {
+        store.commit('updateActionState', { action, state: actionStates.SKIPPED });
+        return;
+      }
+
+      try {
+        await action.action(store);
+        store.commit('updateActionState', { action, state: actionStates.COMPLETED });
+      } catch (error) {
+        store.commit('updateActionState', { action, state: actionStates.FAILED, error });
+      }
+    }));
+
+    store.commit('end');
   };
 
   Object.defineProperties(this, {
@@ -59,42 +51,6 @@ function Backup({ server = {}, config = {} } = {}) {
   });
 }
 
+Object.assign(Backup.prototype, EventEmitter.prototype);
+
 module.exports = Backup;
-
-/*
-  const backup = freeze({
-    config: {
-      gpg: {
-        recipient: null,
-      },
-      paths: {
-        storage: null,
-        tmp: null,
-      },
-    },
-    start: null,
-    end: null,
-    duration: null,
-    server: null,
-    remote: {
-      files: [],
-    },
-    local: {
-      files: [],
-    },
-  });
-
-  Create backup:
-  - Add default state
-  - Add base config
-  - Add server config
-
-  Mutations:
-  - start: set start time, update state
-  - end: set end time, update state
-  - add/remove remote file
-  - add/remove local file
-
-  Computed values:
-  - duration
- */
